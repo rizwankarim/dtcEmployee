@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="SpinnerProjectLocation_list">
+        <item> Choose From Locations </item>
+        <item> Location Item 1 </item>
+        <item> Location Item 2 </item>
+
+    </string-array>
+    <string-array name="SpinnerProjectEmployeesList" >
+        <item> Choose From Employees</item>
+        <item> Item 1 </item>
+        <item> Item 2 </item>
+        <item> Item 3 </item>
+        <item> Item 4 </item>
+    </string-array>
+    <string-array name="SpinnerProjectVehicleList" >
+        <item> Choose From Vehicles</item>
+        <item> Item 1 </item>
+        <item> Item 2 </item>
+        <item> Item 3 </item>
+        <item> Item 4 </item>
+    </string-array>
+    <string-array name="SpinnerAddVehicleEmployeelist" >
+        <item> Choose From Employee</item>
+        <item> Item 1 </item>
+
+        <item> Item 2 </item>
+
+        <item> Item 3 </item>
+        <item> Item 4 </item>
+    </string-array>
+    <string-array name="SpinnerAddVehicleLocationlist" >
+        <item> Choose From Locations</item>
+        <item> Item 1 </item>
+        <item> Item 2 </item>
+        <item> Item 3 </item>
+        <item> Item 4 </item>
+    </string-array>
+    <string-array name="SpinnerCreateEmployeelist" >
+        <item> Choose From Employee</item>
+        <item> Item 1 </item>
+        <item> Item 2 </item>
+        <item> Item 3 </item>
+        <item> Item 4 </item>
+    </string-array>
+
+</resources>

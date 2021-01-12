@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/app_white"
+            android:theme="@style/ToolbarTheme">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <ImageButton
+                    android:id="@+id/back_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_group_127" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8" />
+
+                <ImageView
+                    android:layout_width="122dp"
+                    android:layout_height="21dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="10">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/image3" />
+
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone"
+                        android:indeterminateTint="@color/app_red"/>
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/txtManagerName"
+                    android:fontFamily="@font/helveticaneue_light"
+
+                    android:textSize="17sp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="242dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:elevation="5dp"
+                        app:cardBackgroundColor="@color/app_red"
+                        app:cardElevation="5dp"
+                        app:cardMaxElevation="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/check_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/ic_check_in" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:id="@+id/txtCheckIn"
+                                android:fontFamily="@font/helvetica_neu_bold"
+                                android:text="Check in"
+                                android:textColor="@color/white"
+                                android:textSize="17sp" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="242dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:elevation="5dp"
+                        app:cardBackgroundColor="#A7A7A7"
+                        app:cardElevation="5dp"
+                        app:cardMaxElevation="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/check_out"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/ic_check_out" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/helvetica_neu_bold"
+                                android:text="Check out"
+                                android:id="@+id/txtCheckOut"
+                                android:textColor="@color/black"
+                                android:textSize="17sp" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/helveticaneue_light"
+                        android:text="Should be in 100m max. from location"
+                        android:textColor="@color/button_blue"
+                        android:textSize="17sp" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="242dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="5dp"
+                        app:cardBackgroundColor="#2A4153"
+                        app:cardElevation="5dp"
+                        app:cardMaxElevation="10dp">
+
+                        <LinearLayout
+                            android:id="@+id/add_report"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="10dp"
+                                android:src="@drawable/ic_documents_case" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/helvetica_neu_bold"
+                                android:text="Add report"
+                                android:textColor="@color/white"
+                                android:textSize="17sp" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="5" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/noData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/helvetica_neu_bold"
+                        android:text="No Location Found"
+                        android:textColor="@color/Red"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20sp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="242dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="5dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardElevation="5dp"
+                        app:cardMaxElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <Spinner
+                                android:id="@+id/Spinner_home"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="8"
+                                android:backgroundTint="@color/button_blue"
+                                android:entries="@array/SpinnerHome_items" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/TabLyout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabMinWidth="25dp"
+                    android:layout_marginBottom="10dp"
+                    app:tabIndicatorColor="@color/app_red" />
+
+
+                <com.example.dtcemployee.Utils.WrapContentViewPager
+                    android:id="@+id/Viewpager"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

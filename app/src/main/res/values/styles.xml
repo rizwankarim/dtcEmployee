@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/app_white</item>
+        <item name="colorPrimaryDark">@color/app_red</item>
+        <item name="colorAccent">@color/app_red</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+    <style name="ToolbarWhiteArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/black</item>
+    </style>
+
+    <style name="MyTabTextAppearance1" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/helveticaneue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+</resources>

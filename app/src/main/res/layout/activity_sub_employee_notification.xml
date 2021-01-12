@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.SubEmployeeNotificationActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ChildProfiletoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ToolbarWhiteArrow">
+        <ImageView
+            android:layout_width="122dp"
+            android:layout_height="21dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/logo_high" />
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/helveticaneue_light"
+            android:text="Send Notification:"
+            android:textSize="16sp" />
+        <com.androidbuts.multispinnerfilter.MultiSpinnerSearch
+            android:id="@+id/employeeListSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:background="@drawable/backgroungsearch"
+            android:layout_marginTop="1dp"
+            android:entries="@array/SpinnerCreateEmployeelist"
+            app:hintText="Choose From employee" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+
+            style="@style/MaterialSearchBarLight"
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:layout_margin="10dp"
+            android:id="@+id/textNoti"
+            android:gravity="right"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:background="@drawable/backgroungsearch"
+            android:textDirection="rtl"
+            />
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/create_employee_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/red_rectangle"
+                android:fontFamily="@font/helvetica_neu_bold"
+                android:shadowColor="@color/Red"
+                android:text="Send Notification"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

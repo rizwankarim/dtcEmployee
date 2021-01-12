@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">DTC Employee</string>
+    <string name="staff">Staff\nLogin</string>
+    <string-array name="SpinnerHome_items">
+        <item>No Location</item>
+    </string-array>
+
+    <string-array name="SpinnerVacation_items">
+        <item>Select Type</item>
+        <item>Holidays</item>
+        <item>Sick Leaves</item>
+        <item>Urgent Leave</item>
+        <item>Anual Leaves</item>
+    </string-array>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sorry_no_employee_data_found">Sorry, No employee data found</string>
+    <string name="sorry_no_movements_data_found">Sorry, No movements data found</string>
+</resources>
