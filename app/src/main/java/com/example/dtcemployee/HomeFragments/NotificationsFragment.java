@@ -109,9 +109,6 @@ public class NotificationsFragment extends Fragment {
         });
     }
 
-
-
-
     public void showLoadingDialog() {
         loadingDialog = new AlertDialog.Builder(requireContext()).create();
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.loading_dailoug, null, false);

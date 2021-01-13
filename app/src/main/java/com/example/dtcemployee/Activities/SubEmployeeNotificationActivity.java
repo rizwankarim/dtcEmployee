@@ -96,7 +96,7 @@ public class SubEmployeeNotificationActivity extends AppCompatActivity {
             Log.i("TAG", "sendNotificationToSubEmployee:  " + employeeList.get(0)  + " " + employeeList.size());
 
             Call<SubEmployeeNotification> call = RetrofitClientClass.getInstance().getInterfaceInstance()
-                    .subEmployeeNotification(employee_id, employeeList.get(0), "Notification", notifications, date, time);
+                    .subEmployeeNotification(employee_id, employeeList.get(0), "Notification by Head", notifications, date, time);
             call.enqueue(new Callback<SubEmployeeNotification>() {
                 @Override
                 public void onResponse(Call<SubEmployeeNotification> call, Response<SubEmployeeNotification> response) {
