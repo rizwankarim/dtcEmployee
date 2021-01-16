@@ -225,6 +225,11 @@ public class AddNewReportActivity extends AppCompatActivity {
     }
 
     private void AddReport() {
+        Date time1 = Calendar.getInstance().getTime();
+        SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        SimpleDateFormat sdp1 = new SimpleDateFormat(" hh:mm a", Locale.US);
+        String date = sdp.format(time1);
+        String time = sdp1.format(time1);
         emp_id = Paper.book().read("user_id");
         target = edtTarget.getText().toString();
         achievement = edtAchivemnet.getText().toString();
@@ -244,7 +249,7 @@ public class AddNewReportActivity extends AppCompatActivity {
             Toast.makeText(this, "Please Upload File", Toast.LENGTH_SHORT).show();
         } else {
             showLoadingDialog();
-            Call<AddReport> call = RetrofitClientClass.getInstance().getInterfaceInstance().Addreport(emp_id, project_id, target, datetime,achievement, problems,manager_id);
+            Call<AddReport> call = RetrofitClientClass.getInstance().getInterfaceInstance().Addreport(emp_id, project_id, target, datetime ,achievement, problems,manager_id, date, time);
             call.enqueue(new Callback<AddReport>() {
                 @Override
                 public void onResponse(Call<AddReport> call, Response<AddReport> response) {

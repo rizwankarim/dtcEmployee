@@ -16,6 +16,17 @@ public class SignIn {
     @SerializedName("Employee_Id")
     @Expose
     private List<EmployeeId> employeeId = null;
+    @SerializedName("l_status")
+    @Expose
+    private String l_status;
+
+    public String getL_status() {
+        return l_status;
+    }
+
+    public void setL_status(String l_status) {
+        this.l_status = l_status;
+    }
 
     public String getStatus() {
         return status;

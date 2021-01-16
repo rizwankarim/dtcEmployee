@@ -3,17 +3,20 @@ package com.example.dtcemployee.FirebaseServices;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.dtcemployee.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -21,9 +24,15 @@ import java.util.Map;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
+    public static String device_token;
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
+        device_token= FirebaseInstanceId.getInstance().getToken();
+        SharedPreferences deviceshare= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor= deviceshare.edit();
+        editor.putString("device_token",device_token);
+        editor.apply();
     }
 
     @Override
@@ -61,8 +70,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             notificationChannel.setImportance(NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
             notificationManager.createNotificationChannel(notificationChannel);
-
-
 
         }
 

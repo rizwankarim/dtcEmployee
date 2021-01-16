@@ -129,7 +129,6 @@ public class SubEmployeeNotificationActivity extends AppCompatActivity {
 
     }
 
-
     private void GetallSubEmployee(String emp_id) {
         showLoadingDialog();
         Call<GetemployeeSubEmployee> call = RetrofitClientClass.getInstance().getInterfaceInstance().getEmployeeSubEmploye(emp_id);

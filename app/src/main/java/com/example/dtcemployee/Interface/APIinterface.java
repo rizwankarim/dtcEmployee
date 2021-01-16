@@ -17,6 +17,7 @@ import com.example.dtcemployee.Models.GetEmployeeSubEmployee.GetemployeeSubEmplo
 import com.example.dtcemployee.Models.GetSubEmployeeAllNotification.GetSubEmployeeAllNotification;
 import com.example.dtcemployee.Models.Notification.EmployeeNotification;
 import com.example.dtcemployee.Models.RemoveVacation.RemoveVacation;
+import com.example.dtcemployee.Models.SignIn.EmployeeId;
 import com.example.dtcemployee.Models.SignIn.SignIn;
 import com.example.dtcemployee.Models.SubEmployeeNotification.SubEmployeeNotification;
 import com.example.dtcemployee.Models.SubemployeeDetail.SubEmployeeDetail;
@@ -36,7 +37,18 @@ public interface APIinterface {
     @POST("Sign_In.php")
     Call<SignIn> SignIn(
             @Query("user_name") String user_name,
-            @Query("password") String password
+            @Query("password") String password,
+            @Query("device_token") String device_token
+    );
+
+    @POST("update_loginStatus.php")
+    Call<EmployeeId> updateloginstatus(
+            @Query("emp_id") String emp_id
+    );
+
+    @POST("logout_update.php")
+    Call<EmployeeId> updateLogout(
+            @Query("emp_id") String emp_id
     );
 
     @POST("add_report.php")
@@ -47,7 +59,9 @@ public interface APIinterface {
             @Query("date_time") String date_time,
             @Query("achievement") String achievement,
             @Query("problems") String problems,
-            @Query("manager_id") String manager_id
+            @Query("manager_id") String manager_id,
+            @Query("date") String date,
+            @Query("time") String time
     );
 
     @Multipart

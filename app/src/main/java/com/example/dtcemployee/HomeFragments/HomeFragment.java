@@ -45,6 +45,7 @@ import com.example.dtcemployee.Models.GetEmployeeLocation.EmployeeLocation;
 import com.example.dtcemployee.Models.GetEmployeeLocation.GetEmployeeLocation;
 import com.example.dtcemployee.Models.GetEmployeeProject.EmployeeProject;
 import com.example.dtcemployee.Models.GetEmployeeProject.GetEmployeeProject;
+import com.example.dtcemployee.Models.SignIn.EmployeeId;
 import com.example.dtcemployee.Models.SubemployeeDetail.SubEmployeeDetail;
 import com.example.dtcemployee.RetrofitClient.RetrofitClientClass;
 import com.example.dtcemployee.TabFragments.All_Home_Fragment;
@@ -209,13 +210,8 @@ public class HomeFragment extends Fragment {
                 dialog.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        Paper.book().destroy();
-                        Intent intent = new Intent(requireContext(), LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-
+                        String emp_id= Paper.book().read("user_id");
+                        updateLogouStatus(emp_id);
 
                     }
                 });
@@ -327,6 +323,35 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(requireContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void updateLogouStatus(String emp_id){
+
+        Call<EmployeeId> call = RetrofitClientClass.getInstance().getInterfaceInstance().updateLogout(emp_id);
+        call.enqueue(new Callback<EmployeeId>() {
+            @Override
+            public void onResponse(Call<EmployeeId> call, Response<EmployeeId> response) {
+                if (response.code()==200){
+                    Paper.book().destroy();
+                    Intent intent = new Intent(requireContext(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else if(response.code() == 400){
+
+                    hideLoadingDialog();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<EmployeeId> call, Throwable t) {
+                hideLoadingDialog();
+                //Toast.makeText(LoginActivity.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void CheckOut() {
