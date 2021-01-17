@@ -1,8 +1,11 @@
 package com.example.dtcemployee.HomeFragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -64,9 +67,21 @@ public class EmployeeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        GetallSubEmployee(emp_id);
-    }
+        if(checkConnection())
+        {
+            GetallSubEmployee(emp_id);
 
+        }else
+            {
+                Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+            }
+    }
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo !=null && networkInfo.isConnected();
+    }
     private void GetallSubEmployee(String emp_id) {
         showLoadingDialog();
         Call<GetemployeeSubEmployee> call = RetrofitClientClass.getInstance().getInterfaceInstance().getEmployeeSubEmploye(emp_id);
@@ -90,7 +105,7 @@ public class EmployeeFragment extends Fragment {
                 hideLoadingDialog();
                 textnodata.setVisibility(View.VISIBLE);
                 recyclerViewSubEmployees.setVisibility(View.GONE);
-                Toast.makeText(requireContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "ef "+t.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });

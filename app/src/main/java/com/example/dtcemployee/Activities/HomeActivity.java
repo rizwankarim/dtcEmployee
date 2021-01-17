@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -93,12 +95,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //
 //        }
 
+        if(checkConnection())
+        {
+            Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
 
-        initViews();
-        clickEvents();
+            initViews();
+            clickEvents();
+        }
+        else
+        {
+            initViews();
+            clickEvents();
+            Toast.makeText(this, "Internet Not Available", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
 
+        return networkInfo !=null && networkInfo.isConnected();
+    }
     private void initViews() {
 
         notificationbtn = findViewById(R.id.noti_btn);
@@ -121,7 +139,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         txtmovments = findViewById(R.id.txtmovments);
         txthome = findViewById(R.id.txthome);
 
-        FirebaseInstanceId.getInstance().getInstanceId()
+        if(checkConnection())
+        {
+              FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -133,6 +153,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         UpdateToken(task.getResult().getToken());
                     }
                 });
+
+        }else
+            {
+
+            }
 
 
     }

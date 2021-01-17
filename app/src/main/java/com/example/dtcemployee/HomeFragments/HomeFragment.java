@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -117,9 +119,17 @@ public class HomeFragment extends Fragment {
 //            getData();
 
 
-            GetEmployeeLocation();
-            GetManagerLocation();
-            EmployeeDetail(id);
+            if(checkConnection())
+            {
+                Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
+                GetEmployeeLocation();
+                GetManagerLocation();
+                EmployeeDetail(id);
+            }else
+                {
+                    Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
+
         }
     };
 
@@ -666,5 +676,11 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
+    }
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo !=null && networkInfo.isConnected();
     }
 }

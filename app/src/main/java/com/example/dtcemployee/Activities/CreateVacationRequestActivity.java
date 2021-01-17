@@ -6,9 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -79,7 +82,15 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
         initViews();
         clickEvents();
-        getAllVacationTypye();
+
+        if(checkConnection())
+        {
+            getAllVacationTypye();
+        }
+        else
+        {
+            Toast.makeText(this, "Internet Not Available", Toast.LENGTH_SHORT).show();
+        }
 
 //        holidays.add("Holdays");
 //        holidays.add("Sick Leaves");
@@ -99,7 +110,14 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SubmitRequest();
+                    if(checkConnection())
+                    {
+                        SubmitRequest();
+                    }
+                    else
+                    {
+                        Toast.makeText(CreateVacationRequestActivity.this, "Internet Not Available", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -134,7 +152,12 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         }
 
     }
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
 
+        return networkInfo !=null && networkInfo.isConnected();
+    }
     private void UpDateRequest(String id) {
         String beginning_date = tvBeginning.getText().toString();
         String ending_date = tvEnd.getText().toString();
@@ -333,6 +356,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
     private void SubmitRequest() {
 
+
         type_id = spinner.getSelectedItem().toString();
         String beginning_date = tvBeginning.getText().toString();
         String ending_date = tvEnd.getText().toString();
@@ -376,6 +400,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
                 }
             });
         }
+
 
     }
 

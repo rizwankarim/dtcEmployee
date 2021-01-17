@@ -3,10 +3,13 @@ package com.example.dtcemployee.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -40,9 +43,24 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Paper.init(this);
 
-        initViews();
-        clickEvents();
 
+        if(checkConnection())
+        {
+            Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
+            initViews();
+            clickEvents();
+        }else
+            {
+
+                Toast.makeText(this, "Internet Not Available", Toast.LENGTH_SHORT).show();
+            }
+    }
+
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo !=null && networkInfo.isConnected();
     }
 
     private void initViews() {

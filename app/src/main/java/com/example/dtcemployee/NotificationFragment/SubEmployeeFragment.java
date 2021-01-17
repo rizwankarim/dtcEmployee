@@ -1,8 +1,11 @@
 package com.example.dtcemployee.NotificationFragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -107,9 +110,21 @@ public class SubEmployeeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getData(employee_id);
-    }
+        if(checkConnection())
+        {
+            getData(employee_id);
 
+        }else
+        {
+            Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private boolean checkConnection(){
+        ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo !=null && networkInfo.isConnected();
+    }
     public void showLoadingDialog() {
         loadingDialog = new AlertDialog.Builder(requireContext()).create();
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.loading_dailoug, null, false);
