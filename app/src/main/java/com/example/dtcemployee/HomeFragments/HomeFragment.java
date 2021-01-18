@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -121,12 +122,14 @@ public class HomeFragment extends Fragment {
 
             if(checkConnection())
             {
+                Get_CheckInTime_on_offline();
                 Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
                 GetEmployeeLocation();
                 GetManagerLocation();
                 EmployeeDetail(id);
             }else
                 {
+                    Store_CheckInTime_on_offline();
                     Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
                 }
 
@@ -297,6 +300,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 
     private void CheckIn() {
         showLoadingDialog();
@@ -677,6 +681,33 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
+    public void Store_CheckInTime_on_offline()
+    {
+        Toast.makeText(getActivity(), "Storing Time While Offline", Toast.LENGTH_SHORT).show();
+        Date time = Calendar.getInstance().getTime();
+        SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US);
+        String check_in_time = sdp.format(time);
+
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("offline_Data", Context.MODE_PRIVATE).edit();
+        editor.putString("check_in_time", check_in_time);
+        editor.apply();
+    }
+
+    public void Get_CheckInTime_on_offline()
+    {
+        SharedPreferences prefs = getActivity().getSharedPreferences("offline_Data", Context.MODE_PRIVATE);
+        if(prefs.contains("check_in_time"))
+        {
+            String time = prefs.getString("check_in_time", "No time defined");
+            Toast.makeText(getActivity(), "Time offline "+time, Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+        }
+
+    }
+
     private boolean checkConnection(){
         ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
