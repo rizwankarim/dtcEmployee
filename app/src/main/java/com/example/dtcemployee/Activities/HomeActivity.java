@@ -271,6 +271,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         txtvaction.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+
     private void changeVactionsFragment() {
 
         Fragment newFragment = new VacationsFragment();

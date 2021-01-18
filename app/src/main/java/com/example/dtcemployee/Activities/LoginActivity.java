@@ -97,25 +97,31 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Call<SignIn> call, Response<SignIn> response) {
                             if(response.code() == 200){
                                 hideLoadingDialog();
-                                if(response.body().getL_status().equals("false")){
-                                    String user_id = response.body().getEmployeeId().get(0).getId();
-                                    String manager_id = response.body().getEmployeeId().get(0).getManagerId();
-                                    String manager_name = response.body().getEmployeeId().get(0).getManagerName();
-                                    Paper.book().write("user_id", user_id);
-                                    Paper.book().write("manager_id", manager_id);
-                                    Paper.book().write("manager_name",manager_name);
-                                    updateLoginStatus(user_id);
-                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                    startActivity(intent);
-
+                                if (response.body().getMsg().equals("Login Failed")){
+                                    Toast.makeText(LoginActivity.this, "Invalid Id and Pass..", Toast.LENGTH_SHORT).show();
                                 }
-                                else if(response.body().getMsg().equals("true")){
-                                    Toast.makeText(LoginActivity.this, "Your account is already logged in your registered device", Toast.LENGTH_SHORT).show();
+                                else if(response.body().getMsg().equals("Login Successfully")){
+                                    if(response.body().getL_status().equals("true")){
+                                        Toast.makeText(LoginActivity.this, "Already logged in from other device..", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else if(response.body().getL_status().equals("false")) {
+                                        String user_id = response.body().getEmployeeId().get(0).getId();
+                                        String manager_id = response.body().getEmployeeId().get(0).getManagerId();
+                                        String manager_name = response.body().getEmployeeId().get(0).getManagerName();
+                                        Paper.book().write("user_id", user_id);
+                                        Paper.book().write("manager_id", manager_id);
+                                        Paper.book().write("manager_name",manager_name);
+                                        updateLoginStatus(user_id);
+                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        Toast.makeText(LoginActivity.this, "Something went wrong.. try later..", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                                 else{
-                                    Toast.makeText(LoginActivity.this, response.body().getMsg(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Something went wrong.. try later..", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                             else if(response.code() == 404){
 

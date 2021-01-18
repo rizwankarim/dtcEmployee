@@ -95,7 +95,7 @@
                         android:layout_weight="9"
                         android:backgroundTint="@color/button_blue"
 
-                        android:textDirection="rtl" />
+                        android:textDirection="ltr" />
 
                 </LinearLayout>
 
@@ -145,7 +145,7 @@
                         android:fontFamily="@font/helveticaneue_light"
                         android:hint="Beginning"
                         android:textColor="@color/black"
-                        android:textDirection="rtl"
+                        android:textDirection="ltr"
                         android:textSize="16sp" />
 
 
@@ -204,7 +204,7 @@
                         android:focusable="false"
                         android:clickable="false"
                         android:textColor="@color/black"
-                        android:textDirection="rtl"
+                        android:textDirection="ltr"
                         android:textSize="16sp" />
 
                     <ImageView
@@ -215,7 +215,6 @@
                         app:tint="@color/grey" />
 
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
@@ -258,7 +257,7 @@
                         android:id="@+id/edtReason"
                         android:inputType="textCapSentences"
                         android:textColor="@color/black"
-                        android:textDirection="rtl"
+                        android:textDirection="ltr"
                         android:textSize="16sp" />
 
                     <View
@@ -268,15 +267,12 @@
 
                 </LinearLayout>
 
-
             </androidx.cardview.widget.CardView>
-
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.5" />
-
 
             <Button
                 android:id="@+id/create_employee_btn"

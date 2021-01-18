@@ -300,6 +300,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="8"
+                                android:textDirection="ltr"
                                 android:backgroundTint="@color/button_blue"
                                 android:entries="@array/SpinnerHome_items" />
 

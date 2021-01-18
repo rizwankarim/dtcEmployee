@@ -247,13 +247,20 @@ public class HomeFragment extends Fragment {
 
 
             txtCheckIn.setText("Checked In");
+            txtCheckIn.setBackgroundColor(Color.parseColor("#ff669900"));
+            txtCheckIn.setEnabled(false);
             txtCheckOut.setText("Check Out");
+            txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+            txtCheckOut.setEnabled(true);
 
         }
         else  if(status.equals( "Checkedout")){
 //            Toast.makeText(requireContext(), ""+"Checkedout", Toast.LENGTH_SHORT).show();
             txtCheckOut.setText("Checked Out");
+            txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+            txtCheckOut.setEnabled(false);
             txtCheckIn.setText("Check In");
+            txtCheckIn.setEnabled(true);
 
         }
         }
@@ -319,8 +326,12 @@ public class HomeFragment extends Fragment {
                 if (response.code() == 200) {
                     hideLoadingDialog();
                     txtCheckIn.setText("Checked In");
+                    txtCheckIn.setBackgroundColor(Color.parseColor("#ff669900"));
+                    txtCheckIn.setEnabled(false);
                     Paper.book().write("status", "Checkedin");
                     txtCheckOut.setText("Check Out");
+                    txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+                    txtCheckOut.setEnabled(true);
 
                 } else if (response.code() == 400) {
                     hideLoadingDialog();
@@ -380,7 +391,11 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<CheckOut> call, Response<CheckOut> response) {
                 if(response.code() == 200) {
                     txtCheckIn.setText("Check In");
+                    txtCheckIn.setBackgroundColor(Color.parseColor("#CF3827"));
+                    txtCheckIn.setEnabled(true);
                     txtCheckOut.setText("Checked Out");
+                    txtCheckOut.setEnabled(false);
+                    txtCheckOut.setBackgroundColor(Color.parseColor("#A7A7A7"));
                     Paper.book().write("status", "Checkedout");
 //                   Paper.book().destroy();
 //                   startActivity(new Intent(requireContext(),LoginActivity.class));
@@ -414,6 +429,8 @@ public class HomeFragment extends Fragment {
         adapter.addFragment(new Overtime_Home_Fragment(), "OverTime");
         viewpager.setAdapter(adapter);
     }
+
+
 
     public void showLoadingDialog() {
         loadingDialog = new AlertDialog.Builder(requireContext()).create();
@@ -507,7 +524,7 @@ public class HomeFragment extends Fragment {
         List<String> locationList = new ArrayList<>();
 
         for (int w = 0; w < allLocationList.size(); w++) {
-            locationList.add(allLocationList.get(w).getName());
+            locationList.add(allLocationList.get(w).getTitle());
         }
 
         spinnerArrayAdapter = new ArrayAdapter<String>(requireContext(), R.layout.spineer_layout, locationList);
@@ -520,7 +537,7 @@ public class HomeFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 for (int w = 0; w < allLocationList.size(); w++) {
-                    if (allLocationList.get(w).getName().equals(adapterView.getSelectedItem())) {
+                    if (allLocationList.get(w).getTitle().equals(adapterView.getSelectedItem())) {
                         project_id = allLocationList.get(w).getId();
                         location_id = allLocationList.get(w).getId();
                     }
