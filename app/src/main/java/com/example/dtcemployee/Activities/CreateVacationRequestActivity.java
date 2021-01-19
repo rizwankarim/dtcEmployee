@@ -37,10 +37,13 @@ import com.example.dtcemployee.Models.VacationDetail.VacationDetail;
 import com.example.dtcemployee.R;
 import com.example.dtcemployee.RetrofitClient.RetrofitClientClass;
 
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.paperdb.Paper;
 import retrofit2.Call;
@@ -356,6 +359,11 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
     private void SubmitRequest() {
 
+        Date time1 = Calendar.getInstance().getTime();
+        SimpleDateFormat sdp = new SimpleDateFormat("dd/M/yyyy", Locale.US);
+        SimpleDateFormat sdp1 = new SimpleDateFormat(" hh:mm a", Locale.US);
+        String date = sdp.format(time1);
+        String time = sdp1.format(time1);
 
         type_id = spinner.getSelectedItem().toString();
         String beginning_date = tvBeginning.getText().toString();
@@ -364,44 +372,48 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         String type_id = employeeId;
         String emp_name= empName.getText().toString();
 
-
-        if (type_id.isEmpty()) {
-            Toast.makeText(this, "Please Select Type", Toast.LENGTH_SHORT).show();
-        } else if (beginning_date.isEmpty()) {
-            tvBeginning.setError("Please Enter Start Date");
-            tvBeginning.requestFocus();
-        } else if (ending_date.isEmpty()) {
-            tvEnd.setError("Please Enter End Date");
-            tvEnd.requestFocus();
-        } else if (Reason.isEmpty()) {
-            edtReason.getText().toString();
-            edtReason.requestFocus();
-        } else {
-            showLoadingDialog();
-            Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
-                    emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
-            call.enqueue(new Callback<AddVocation>() {
-                @Override
-                public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {
-                    if (response.code() == 200) {
-                        hideLoadingDialog();
-                        finish();
-                        Toast.makeText(CreateVacationRequestActivity.this, "Add Vacation Successfully", Toast.LENGTH_SHORT).show();
-                    } else if (response.code() == 400) {
-                        hideLoadingDialog();
-                        Toast.makeText(CreateVacationRequestActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AddVocation> call, Throwable t) {
-                    hideLoadingDialog();
-
-                    Toast.makeText(CreateVacationRequestActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+        if(date.equals(beginning_date)){
+            Toast.makeText(this, "Sorry, You can't make today your beginning date for leave..", Toast.LENGTH_SHORT).show();
         }
 
+        else{
+            if (type_id.isEmpty()) {
+                Toast.makeText(this, "Please Select Type", Toast.LENGTH_SHORT).show();
+            } else if (beginning_date.isEmpty()) {
+                tvBeginning.setError("Please Enter Start Date");
+                tvBeginning.requestFocus();
+            } else if (ending_date.isEmpty()) {
+                tvEnd.setError("Please Enter End Date");
+                tvEnd.requestFocus();
+            } else if (Reason.isEmpty()) {
+                edtReason.getText().toString();
+                edtReason.requestFocus();
+            } else {
+                showLoadingDialog();
+                Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
+                        emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
+                call.enqueue(new Callback<AddVocation>() {
+                    @Override
+                    public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {
+                        if (response.code() == 200) {
+                            hideLoadingDialog();
+                            finish();
+                            Toast.makeText(CreateVacationRequestActivity.this, "Add Vacation Successfully", Toast.LENGTH_SHORT).show();
+                        } else if (response.code() == 400) {
+                            hideLoadingDialog();
+                            Toast.makeText(CreateVacationRequestActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AddVocation> call, Throwable t) {
+                        hideLoadingDialog();
+
+                        Toast.makeText(CreateVacationRequestActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
 
     }
 
