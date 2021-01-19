@@ -7,6 +7,9 @@ import com.example.dtcemployee.Models.CheckIn.CheckIn;
 import com.example.dtcemployee.Models.CheckInchckout.CheckInCheckOut;
 import com.example.dtcemployee.Models.CheckOut.CheckOut;
 import com.example.dtcemployee.Models.EmployeeAttendence.EmployeeAttenndence;
+import com.example.dtcemployee.Models.EmptoEmpNotification.EmptoEmpNotification;
+import com.example.dtcemployee.Models.GetAllEmployees.GetAllEmployees;
+import com.example.dtcemployee.Models.GetAllEmployeesNotification.GetAllEmployeesNotification;
 import com.example.dtcemployee.Models.GetAllLocation.GetAllLocation;
 import com.example.dtcemployee.Models.GetAllManagerNotification.GetAllManagerNotification;
 import com.example.dtcemployee.Models.GetAllVacationTypye.GetAllVacation;
@@ -38,12 +41,13 @@ public interface APIinterface {
     Call<SignIn> SignIn(
             @Query("user_name") String user_name,
             @Query("password") String password,
-            @Query("device_token") String device_token
+            @Query("imei_number") String imei_number
     );
 
     @POST("update_loginStatus.php")
     Call<EmployeeId> updateloginstatus(
-            @Query("emp_id") String emp_id
+            @Query("emp_id") String emp_id,
+            @Query("imei_number") String imei_number
     );
 
     @POST("logout_update.php")
@@ -133,6 +137,12 @@ public interface APIinterface {
 
     );
 
+    @POST("get_all_employees_for_notification.php")
+    Call<GetAllEmployees> getAllEmployees(
+            @Query("manager_id") String manager_id
+
+    );
+
     @POST("get_employee_detail.php")
     Call<SubEmployeeDetail> SubEmployeeDetail(
             @Query("id") String id
@@ -203,9 +213,27 @@ public interface APIinterface {
             @Query("time") String time
     );
 
+    @POST("emp_to_emp_notification.php")
+    Call<EmptoEmpNotification> emptoempNotification(
+
+            @Query("manager_id") String manager_id,
+            @Query("employee_id") String employee_id,
+            @Query("sub_emp_id") String sub_emp_id,
+            @Query("title") String title,
+            @Query("notifications") String notifications,
+            @Query("date") String date,
+            @Query("time") String time
+    );
+
     @POST("get_sub_employee_notifications.php")
     Call<GetSubEmployeeAllNotification> GET_SUB_EMPLOYEE_ALL_NOTIFICATION_CALL(
+            @Query("employee_id") String employee_id
 
+    );
+
+    @POST("get_all_emp_to_emp_notifications.php")
+    Call<GetAllEmployeesNotification> getAllEmployeesnNotifications(
+            @Query("manager_id") String manager_id,
             @Query("employee_id") String employee_id
 
     );

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
 import com.androidbuts.multispinnerfilter.MultiSpinnerListener;
 import com.androidbuts.multispinnerfilter.MultiSpinnerSearch;
+import com.example.dtcemployee.Activities.EmptoEmpNotificationActivity;
 import com.example.dtcemployee.Activities.ManagerNoticationActivity;
 import com.example.dtcemployee.Activities.ShowEmployeeDetailActivity;
 import com.example.dtcemployee.Activities.SubEmployeeNotificationActivity;
@@ -32,6 +33,7 @@ import com.example.dtcemployee.EmployeDetailFragment.DetailFragment;
 import com.example.dtcemployee.EmployeDetailFragment.ReportFragment;
 import com.example.dtcemployee.Models.GetEmployeeSubEmployee.AllSubEmployee;
 import com.example.dtcemployee.Models.GetEmployeeSubEmployee.GetemployeeSubEmployee;
+import com.example.dtcemployee.NotificationFragment.EmptoEmpFragment;
 import com.example.dtcemployee.NotificationFragment.ManagerFragment;
 import com.example.dtcemployee.NotificationFragment.SubEmployeeFragment;
 import com.example.dtcemployee.R;
@@ -74,8 +76,9 @@ public class NotificationsFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getChildFragmentManager(), requireContext());
-        fragmentAdapter.addFrag(new SubEmployeeFragment(), "Employee");
+        fragmentAdapter.addFrag(new SubEmployeeFragment(), "Sub Employee");
         fragmentAdapter.addFrag(new ManagerFragment(), "Manager");
+        fragmentAdapter.addFrag(new EmptoEmpFragment(),"Employee");
 
 
         viewPager.setAdapter(fragmentAdapter);
@@ -101,6 +104,13 @@ public class NotificationsFragment extends Fragment {
 
                         startActivity(new Intent(requireContext(), ManagerNoticationActivity.class));
 
+                    }
+                });
+
+                dialog.setNeutralButton("Employee", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity((new Intent(requireContext(), EmptoEmpNotificationActivity.class)));
                     }
                 });
 

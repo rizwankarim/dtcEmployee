@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/button_blue"
+    android:layout_height="wrap_content">
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -17,11 +27,14 @@
             android:layout_width="0dp"
             android:layout_weight="0.8"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:text="Name:"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -32,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtEmployeeName"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:text=""/>
         </LinearLayout>
@@ -41,13 +55,12 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2"
         android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="0.8"
@@ -55,6 +68,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:text="CheckIn Time:"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -66,6 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:id="@+id/txtCheckIn"
                 android:textSize="16sp"
                 android:text=""/>
@@ -88,6 +104,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:text="CheckOut Time:"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -99,6 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:id="@+id/txtCheckout"
                 android:textSize="16sp"
                 android:text=""/>
@@ -112,3 +131,4 @@
         android:background="@color/colorlightBlack"/>
 
 </LinearLayout>
+</androidx.cardview.widget.CardView>

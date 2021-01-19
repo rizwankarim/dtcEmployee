@@ -114,6 +114,7 @@ public class HomeFragment extends Fragment {
 
             latitudes = locationResult.getLastLocation().getLatitude();
             longitudes = locationResult.getLastLocation().getLongitude();
+
 //            Address = getCompleteAddress(currentLatitude, currentLongitude);
 //            CureentAddress = getCompleteAddress(currentLatitude, currentLongitude);
 
@@ -130,6 +131,7 @@ public class HomeFragment extends Fragment {
             }else
                 {
                     Store_CheckInTime_on_offline();
+                    Toast.makeText(getActivity(), Double.toString(latitudes)+","+Double.toString(longitudes), Toast.LENGTH_SHORT).show();
                     Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
                 }
 
@@ -178,7 +180,7 @@ public class HomeFragment extends Fragment {
         manager_id = Paper.book().read("manager_id");
 
         TabLayout.setupWithViewPager(Viewpager);
-        setUpViewPager(Viewpager);
+        //setUpViewPager(Viewpager);
 
 //        GetEmployeeProject(id);
 
@@ -223,8 +225,13 @@ public class HomeFragment extends Fragment {
                 dialog.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String emp_id= Paper.book().read("user_id");
-                        updateLogouStatus(emp_id);
+                        //String emp_id= Paper.book().read("user_id");
+                        Paper.book().destroy();
+                        Intent intent = new Intent(requireContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        //updateLogouStatus(emp_id);
 
                     }
                 });
@@ -247,20 +254,25 @@ public class HomeFragment extends Fragment {
 
 
             txtCheckIn.setText("Checked In");
-            txtCheckIn.setBackgroundColor(Color.parseColor("#ff669900"));
+            check_in.setBackgroundColor(Color.parseColor("#ff669900"));
+            check_in.setEnabled(false);
             txtCheckIn.setEnabled(false);
             txtCheckOut.setText("Check Out");
-            txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+            check_out.setBackgroundColor(Color.parseColor("#CF3827"));
+            check_out.setEnabled(true);
             txtCheckOut.setEnabled(true);
 
         }
         else  if(status.equals( "Checkedout")){
 //            Toast.makeText(requireContext(), ""+"Checkedout", Toast.LENGTH_SHORT).show();
             txtCheckOut.setText("Checked Out");
-            txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+            check_out.setBackgroundColor(Color.parseColor("#A7A7A7"));
             txtCheckOut.setEnabled(false);
+            check_out.setEnabled(false);
             txtCheckIn.setText("Check In");
             txtCheckIn.setEnabled(true);
+            check_in.setEnabled(true);
+            check_in.setBackgroundColor(Color.parseColor("#CF3827"));
 
         }
         }
@@ -326,11 +338,12 @@ public class HomeFragment extends Fragment {
                 if (response.code() == 200) {
                     hideLoadingDialog();
                     txtCheckIn.setText("Checked In");
-                    txtCheckIn.setBackgroundColor(Color.parseColor("#ff669900"));
-                    txtCheckIn.setEnabled(false);
+                    check_in.setBackgroundColor(Color.parseColor("#ff669900"));
+                    check_in.setEnabled(false);
                     Paper.book().write("status", "Checkedin");
                     txtCheckOut.setText("Check Out");
-                    txtCheckOut.setBackgroundColor(Color.parseColor("#CF3827"));
+                    check_out.setBackgroundColor(Color.parseColor("#CF3827"));
+                    check_out.setEnabled(true);
                     txtCheckOut.setEnabled(true);
 
                 } else if (response.code() == 400) {
@@ -391,11 +404,13 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<CheckOut> call, Response<CheckOut> response) {
                 if(response.code() == 200) {
                     txtCheckIn.setText("Check In");
-                    txtCheckIn.setBackgroundColor(Color.parseColor("#CF3827"));
+                    check_in.setBackgroundColor(Color.parseColor("#CF3827"));
                     txtCheckIn.setEnabled(true);
+                    check_in.setEnabled(true);
                     txtCheckOut.setText("Checked Out");
                     txtCheckOut.setEnabled(false);
-                    txtCheckOut.setBackgroundColor(Color.parseColor("#A7A7A7"));
+                    check_out.setEnabled(false);
+                    check_out.setBackgroundColor(Color.parseColor("#A7A7A7"));
                     Paper.book().write("status", "Checkedout");
 //                   Paper.book().destroy();
 //                   startActivity(new Intent(requireContext(),LoginActivity.class));
@@ -421,16 +436,14 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void setUpViewPager(ViewPager viewpager) {
-        HomeFragmentAdapter adapter = new HomeFragmentAdapter(this.getChildFragmentManager());
-        adapter.addFragment(new All_Home_Fragment(), "All");
-        adapter.addFragment(new Permenance_Home_Fragment(), "Permance");
-        adapter.addFragment(new Vacation_Home_Fragment(), "Vacation");
-        adapter.addFragment(new Overtime_Home_Fragment(), "OverTime");
-        viewpager.setAdapter(adapter);
-    }
-
-
+//    private void setUpViewPager(ViewPager viewpager) {
+//        HomeFragmentAdapter adapter = new HomeFragmentAdapter(this.getChildFragmentManager());
+//        adapter.addFragment(new All_Home_Fragment(), "All");
+//        adapter.addFragment(new Permenance_Home_Fragment(), "Permance");
+//        adapter.addFragment(new Vacation_Home_Fragment(), "Vacation");
+//        adapter.addFragment(new Overtime_Home_Fragment(), "OverTime");
+//        viewpager.setAdapter(adapter);
+//    }
 
     public void showLoadingDialog() {
         loadingDialog = new AlertDialog.Builder(requireContext()).create();

@@ -1,17 +1,23 @@
 package com.example.dtcemployee.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,16 +39,19 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int REQUEST_READ_PHONE_STATE =1 ;
     Button loginbtn;
     EditText edtUsername,edtPassword;
     AlertDialog loadingDialog;
+    String Imei_Number;
+    TelephonyManager telephonyManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Paper.init(this);
-
 
         if(checkConnection())
         {
@@ -68,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         loginbtn = findViewById(R.id.loginbtn);
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
+        telephonyManager= (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        checkPhonePermission();
     }
 
     private void clickEvents() {
@@ -91,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     showLoadingDialog();
-                    Call<SignIn> call = RetrofitClientClass.getInstance().getInterfaceInstance().SignIn(user_name,password,user_dt);
+                    Call<SignIn> call = RetrofitClientClass.getInstance().getInterfaceInstance().SignIn(user_name,password,Imei_Number);
                     call.enqueue(new Callback<SignIn>() {
                         @Override
                         public void onResponse(Call<SignIn> call, Response<SignIn> response) {
@@ -101,10 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, "Invalid Id and Pass..", Toast.LENGTH_SHORT).show();
                                 }
                                 else if(response.body().getMsg().equals("Login Successfully")){
-                                    if(response.body().getL_status().equals("true")){
-                                        Toast.makeText(LoginActivity.this, "Already logged in from other device..", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else if(response.body().getL_status().equals("false")) {
+                                    if(response.body().getL_status().equals(Imei_Number)|| response.body().getL_status().equals("false")){
                                         String user_id = response.body().getEmployeeId().get(0).getId();
                                         String manager_id = response.body().getEmployeeId().get(0).getManagerId();
                                         String manager_name = response.body().getEmployeeId().get(0).getManagerName();
@@ -114,6 +122,10 @@ public class LoginActivity extends AppCompatActivity {
                                         updateLoginStatus(user_id);
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         startActivity(intent);
+                                        finish();
+                                    }
+                                    else if(!response.body().getL_status().equals(Imei_Number)) {
+                                        Toast.makeText(LoginActivity.this, "Already logged in from other device..", Toast.LENGTH_SHORT).show();
                                     }
                                     else{
                                         Toast.makeText(LoginActivity.this, "Something went wrong.. try later..", Toast.LENGTH_SHORT).show();
@@ -146,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void updateLoginStatus(String emp_id){
 
-        Call<EmployeeId> call = RetrofitClientClass.getInstance().getInterfaceInstance().updateloginstatus(emp_id);
+        Call<EmployeeId> call = RetrofitClientClass.getInstance().getInterfaceInstance().updateloginstatus(emp_id,Imei_Number);
         call.enqueue(new Callback<EmployeeId>() {
             @Override
             public void onResponse(Call<EmployeeId> call, Response<EmployeeId> response) {
@@ -169,6 +181,33 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    public void checkPhonePermission(){
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
+        } else {
+            Imei_Number=telephonyManager.getDeviceId();
+            Toast.makeText(this, Imei_Number, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_PHONE_STATE:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    Imei_Number=telephonyManager.getDeviceId();
+                    Toast.makeText(this, Imei_Number, Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                break;
+        }
+
+    }
 
     public void showLoadingDialog() {
         loadingDialog = new AlertDialog.Builder(LoginActivity.this).create();

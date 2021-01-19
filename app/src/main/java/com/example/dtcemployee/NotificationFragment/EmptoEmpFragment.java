@@ -20,6 +20,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.dtcemployee.Adapter.EmptoEmpNotificationAdapter;
+import com.example.dtcemployee.Models.GetAllEmployeesNotification.EmpNotification;
+import com.example.dtcemployee.Models.GetAllEmployeesNotification.GetAllEmployeesNotification;
 import com.example.dtcemployee.Models.GetSubEmployeeAllNotification.GetSubEmployeeAllNotification;
 import com.example.dtcemployee.Models.GetSubEmployeeAllNotification.Notification;
 import com.example.dtcemployee.R;
@@ -33,71 +36,67 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubEmployeeFragment extends Fragment {
-    RecyclerView SubEmpNotiRecylerView;
+public class EmptoEmpFragment extends Fragment {
+    RecyclerView EmptoEmprecyclerview;
     String employee_id;
-    List<Notification> notificationList = new ArrayList<>();
+    String manager_id;
+    List<EmpNotification> notificationList = new ArrayList<>();
     LinearLayout noData_layout;
     AlertDialog loadingDialog;
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sub_employee, container, false);
+        return inflater.inflate(R.layout.fragment_empto_emp, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Paper.init(requireContext());
-        SubEmpNotiRecylerView = view.findViewById(R.id.SubEmpNotiRecylerView);
-        SubEmpNotiRecylerView.setHasFixedSize(true);
-        SubEmpNotiRecylerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        EmptoEmprecyclerview = view.findViewById(R.id.emptoemprecyclerview);
+        EmptoEmprecyclerview.setHasFixedSize(true);
+        EmptoEmprecyclerview.setLayoutManager(new LinearLayoutManager(requireContext()));
         noData_layout = view.findViewById(R.id.noData_layout);
         employee_id = Paper.book().read("user_id");
+        manager_id=Paper.book().read("manager_id");
     }
 
     private void getData(String employee_id) {
         showLoadingDialog();
 
-        Call<GetSubEmployeeAllNotification> call = RetrofitClientClass.getInstance()
-                .getInterfaceInstance().GET_SUB_EMPLOYEE_ALL_NOTIFICATION_CALL(employee_id);
-        call.enqueue(new Callback<GetSubEmployeeAllNotification>() {
+        Call<GetAllEmployeesNotification> call = RetrofitClientClass.getInstance()
+                .getInterfaceInstance().getAllEmployeesnNotifications(manager_id,employee_id);
+        call.enqueue(new Callback<GetAllEmployeesNotification>() {
             @Override
-            public void onResponse(Call<GetSubEmployeeAllNotification> call, Response<GetSubEmployeeAllNotification> response) {
+            public void onResponse(Call<GetAllEmployeesNotification> call, Response<GetAllEmployeesNotification> response) {
                 if(response.code() == 200){
-                hideLoadingDialog();
+                    hideLoadingDialog();
+
                     noData_layout.setVisibility(View.GONE);
-                    SubEmpNotiRecylerView.setVisibility(View.VISIBLE);
+                    EmptoEmprecyclerview.setVisibility(View.VISIBLE);
                     notificationList = response.body().getNotifications();
-                    com.example.dtcemployee.Adapter.GetSubEmployeeAllNotification getAllNotifactiondapter = new com.example.dtcemployee.Adapter.GetSubEmployeeAllNotification(requireContext(),notificationList);
-                    SubEmpNotiRecylerView.setAdapter(getAllNotifactiondapter);
+                    EmptoEmpNotificationAdapter getAllNotifactiondapter = new EmptoEmpNotificationAdapter(requireContext(),notificationList);
+                    EmptoEmprecyclerview.setAdapter(getAllNotifactiondapter);
 
                 }
                 else if(response.code() == 404){
                     hideLoadingDialog();
                     noData_layout.setVisibility(View.VISIBLE);
-                    SubEmpNotiRecylerView.setVisibility(View.GONE);
+                    EmptoEmprecyclerview.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
                 }
                 else if(response.code() == 400){
                     hideLoadingDialog();
                     noData_layout.setVisibility(View.VISIBLE);
-                    SubEmpNotiRecylerView.setVisibility(View.GONE);
+                    EmptoEmprecyclerview.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<GetSubEmployeeAllNotification> call, Throwable t) {
+            public void onFailure(Call<GetAllEmployeesNotification> call, Throwable t) {
                 hideLoadingDialog();
                 Toast.makeText(requireContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -136,4 +135,6 @@ public class SubEmployeeFragment extends Fragment {
     public void hideLoadingDialog() {
         loadingDialog.dismiss();
     }
+
+
 }

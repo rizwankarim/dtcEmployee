@@ -7,7 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -18,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.ManagerNoticationActivity"></activity>
+        <activity android:name=".Activities.EmptoEmpNotificationActivity"></activity>
+        <activity android:name=".Activities.ManagerNoticationActivity" />
         <activity android:name=".Activities.SubEmployeeNotificationActivity" />
         <activity android:name=".Activities.ShowEmployeeDetailActivity" />
         <activity
