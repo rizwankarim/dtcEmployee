@@ -80,6 +80,7 @@ public interface APIinterface {
     Call<AddVocation> AddVaction(
             @Query("manager_id") String manager_id,
             @Query("emp_id") String emp_id,
+            @Query("emp_name")String emp_name,
             @Query("type_id") String type_id,
             @Query("beginning_date") String beginning_date,
             @Query("ending_date") String ending_date,

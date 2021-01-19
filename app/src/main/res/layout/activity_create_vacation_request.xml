@@ -102,11 +102,58 @@
 
             </androidx.cardview.widget.CardView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_rounded_rectangle"
+                android:elevation="5dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="5dp"
+                tools:ignore="NestedWeights">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:weightSum="10">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="8"
+                        android:background="@color/white"
+                        android:fontFamily="@font/helveticaneue_light"
+                        android:hint="Employee Name"
+                        android:id="@+id/name"
+                        android:inputType="textCapSentences"
+                        android:textColor="@color/black"
+                        android:textDirection="ltr"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.3" />
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

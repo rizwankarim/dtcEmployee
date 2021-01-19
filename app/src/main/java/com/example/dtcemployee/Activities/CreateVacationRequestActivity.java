@@ -52,7 +52,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
     Button button;
     Spinner spinner;
     EditText tvBeginning, tvEnd;
-    EditText edtReason;
+    EditText edtReason, empName;
     LinearLayout beginningDateLayout, endDateLayout;
     String check;
     String manager_id, emp_id, type_id, beginning_date, ending_date, Reason;
@@ -296,7 +296,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         beginningDateLayout = findViewById(R.id.beginningDate);
         endDateLayout = findViewById(R.id.EndDate);
         edtReason = findViewById(R.id.edtReason);
-
+        empName= findViewById(R.id.name);
 
     }
 
@@ -362,6 +362,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         String ending_date = tvEnd.getText().toString();
         String Reason = edtReason.getText().toString();
         String type_id = employeeId;
+        String emp_name= empName.getText().toString();
 
 
         if (type_id.isEmpty()) {
@@ -378,7 +379,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         } else {
             showLoadingDialog();
             Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
-                    emp_id, type_id, beginning_date, ending_date, Reason);
+                    emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
             call.enqueue(new Callback<AddVocation>() {
                 @Override
                 public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {
