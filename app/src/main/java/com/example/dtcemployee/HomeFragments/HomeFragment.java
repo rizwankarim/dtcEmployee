@@ -66,6 +66,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -102,7 +103,7 @@ public class HomeFragment extends Fragment {
 
     Spinner Spinner_home;
     String emp_id, id, project_id = "",location_id = "",manager_id="";
-    double longitudes, latitudes;
+    public double longitudes, latitudes;
 
 
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -123,14 +124,24 @@ public class HomeFragment extends Fragment {
 
             if(checkConnection())
             {
-                Get_CheckInTime_on_offline();
+                // get paper db data usko store in db
+                // paper db khaali krdo
+                // paper.book().read("key");
+                String time_offline=Paper.book().read("checkedIn_time_offline");
+                String latlong_offline_lat=Paper.book().read("latLong_offline_lat");
+                String latlong_offline_lon=Paper.book().read("latLong_offline_lon");
+                // store db data here
+
+                Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
+                        Toast.LENGTH_SHORT).show();
+
                 Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
                 GetEmployeeLocation();
                 GetManagerLocation();
                 EmployeeDetail(id);
             }else
                 {
-                    Store_CheckInTime_on_offline();
                     Toast.makeText(getActivity(), Double.toString(latitudes)+","+Double.toString(longitudes), Toast.LENGTH_SHORT).show();
                     Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
                 }
@@ -207,12 +218,32 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(location_id.equals("")){
+                // check internet connection
+                if(checkConnection())
+                {
+                    if(location_id.equals("")){
 
-                    Toast.makeText(requireContext(), "No Location Assigned", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "No Location Assigned", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+
+                        //  if available
+                        CheckIn();
+                    }
                 }
-                else {
-                    CheckIn();
+                else
+                {
+                    //else not available
+                    // paper db store latlong and time
+                    // paper.book("key","value");
+                    Store_CheckInTime_on_offline();
+                    String checkInTime_offline=Get_CheckInTime_on_offline();
+                    LatLng loc_offline=new LatLng(latitudes,longitudes);
+                    Paper.book().write("latLong_offline_lat", Double.toString(loc_offline.latitude));
+                    Paper.book().write("latLong_offline_lon", Double.toString(loc_offline.longitude));
+                    Paper.book().write("checkedIn_time_offline",checkInTime_offline);
+
+
                 }
             }
         });
@@ -719,23 +750,27 @@ public class HomeFragment extends Fragment {
         SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US);
         String check_in_time = sdp.format(time);
 
+
         SharedPreferences.Editor editor = getActivity().getSharedPreferences("offline_Data", Context.MODE_PRIVATE).edit();
         editor.putString("check_in_time", check_in_time);
         editor.apply();
+
     }
 
-    public void Get_CheckInTime_on_offline()
+    public String Get_CheckInTime_on_offline()
     {
+        String checkInTime = null;
         SharedPreferences prefs = getActivity().getSharedPreferences("offline_Data", Context.MODE_PRIVATE);
         if(prefs.contains("check_in_time"))
         {
             String time = prefs.getString("check_in_time", "No time defined");
+            checkInTime=time;
             Toast.makeText(getActivity(), "Time offline "+time, Toast.LENGTH_SHORT).show();
         }
         else{
-
+            checkInTime="No time defined";
         }
-
+        return checkInTime;
     }
 
     private boolean checkConnection(){
