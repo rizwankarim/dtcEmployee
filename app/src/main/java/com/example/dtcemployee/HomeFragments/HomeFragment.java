@@ -124,18 +124,6 @@ public class HomeFragment extends Fragment {
 
             if(checkConnection())
             {
-                // get paper db data usko store in db
-                // paper db khaali krdo
-                // paper.book().read("key");
-                String time_offline=Paper.book().read("checkedIn_time_offline");
-                String latlong_offline_lat=Paper.book().read("latLong_offline_lat");
-                String latlong_offline_lon=Paper.book().read("latLong_offline_lon");
-                // store db data here
-
-                Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
-                        Toast.LENGTH_SHORT).show();
-
                 Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
                 GetEmployeeLocation();
                 GetManagerLocation();
@@ -171,8 +159,6 @@ public class HomeFragment extends Fragment {
             requestPermission();
 
         }
-
-
 
         TabLayout TabLayout = view.findViewById(R.id.TabLyout);
         WrapContentViewPager Viewpager = view.findViewById(R.id.Viewpager);
@@ -242,8 +228,6 @@ public class HomeFragment extends Fragment {
                     Paper.book().write("latLong_offline_lat", Double.toString(loc_offline.latitude));
                     Paper.book().write("latLong_offline_lon", Double.toString(loc_offline.longitude));
                     Paper.book().write("checkedIn_time_offline",checkInTime_offline);
-
-
                 }
             }
         });
@@ -271,6 +255,8 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+
 
     @Override
     public void onResume() {
@@ -326,6 +312,7 @@ public class HomeFragment extends Fragment {
                         Spinner_home.setEnabled(true);
                         check_in.setEnabled(true);
                         spinnerevents(allLocationList);
+                        insertOfflinedata();
                     }
                     else {
                         noData.setVisibility(View.VISIBLE);
@@ -351,6 +338,43 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public void insertOfflinedata(){
+        String time_offline=Paper.book().read("checkedIn_time_offline");
+        String latlong_offline_lat=Paper.book().read("latLong_offline_lat");
+        String latlong_offline_lon=Paper.book().read("latLong_offline_lon");
+        // store db data here
+
+        Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
+                Toast.LENGTH_SHORT).show();
+
+        if(time_offline!=null && latlong_offline_lat!=null && latlong_offline_lon!=null){
+            Double initlat= Double.parseDouble(latlong_offline_lat);
+            Double initlong=Double.parseDouble(latlong_offline_lon);
+
+            for (int i=0;i<allLocationList.size();i++){
+                Double finallat=Double.parseDouble(allLocationList.get(i).getLatitudes());
+                Double finallong=Double.parseDouble(allLocationList.get(i).getLongitudes());
+                Double distance= CalculationByDistance(initlat,initlong,finallat,finallong);
+                if (distance<=100){
+                    String loc_id=allLocationList.get(i).getId();
+                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    CheckIn(loc_id,initlat,initlong,time_offline);
+                    Paper.book().delete("checkedIn_time_offline");
+                    Paper.book().delete("latLong_offline_lat");
+                    Paper.book().delete("latLong_offline_lon");
+                    break;
+                }
+                else{
+                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+        else{
+            Log.d("Offline data","No data available");
+        }
+    }
+
 
     private void CheckIn() {
         showLoadingDialog();
@@ -363,6 +387,41 @@ public class HomeFragment extends Fragment {
                 + "\n" + longitudes + "\n" + check_in_time);
 
         Call<CheckIn> call = RetrofitClientClass.getInstance().getInterfaceInstance().CheckIn("17",location_id, emp_id,  latitudes,  longitudes, check_in_time);
+        call.enqueue(new Callback<CheckIn>() {
+            @Override
+            public void onResponse(Call<CheckIn> call, Response<CheckIn> response) {
+                if (response.code() == 200) {
+                    hideLoadingDialog();
+                    txtCheckIn.setText("Checked In");
+                    check_in.setBackgroundColor(Color.parseColor("#ff669900"));
+                    check_in.setEnabled(false);
+                    Paper.book().write("status", "Checkedin");
+                    txtCheckOut.setText("Check Out");
+                    check_out.setBackgroundColor(Color.parseColor("#CF3827"));
+                    check_out.setEnabled(true);
+                    txtCheckOut.setEnabled(true);
+
+                } else if (response.code() == 400) {
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Please Reached at Project Site First", Toast.LENGTH_SHORT).show();
+                }
+                else if(response.code() ==404) {
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CheckIn> call, Throwable t) {
+                hideLoadingDialog();
+                Toast.makeText(requireContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void CheckIn(String loc_id,Double lat,Double lon,String time) {
+        showLoadingDialog();
+
+        Call<CheckIn> call = RetrofitClientClass.getInstance().getInterfaceInstance().CheckIn("17",loc_id, emp_id,  lat,  lon, time);
         call.enqueue(new Callback<CheckIn>() {
             @Override
             public void onResponse(Call<CheckIn> call, Response<CheckIn> response) {
@@ -778,5 +837,23 @@ public class HomeFragment extends Fragment {
         NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
 
         return networkInfo !=null && networkInfo.isConnected();
+    }
+
+    public double CalculationByDistance(double initialLat, double initialLong,
+                                        double finalLat, double finalLong){
+        int R = 6371000; // km (Earth radius)
+        double dLat = toRadians(finalLat-initialLat);
+        double dLon = toRadians(finalLong-initialLong);
+        initialLat = toRadians(initialLat);
+        finalLat = toRadians(finalLat);
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(initialLat) * Math.cos(finalLat);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+
+    public double toRadians(double deg) {
+        return deg * (Math.PI/180);
     }
 }
