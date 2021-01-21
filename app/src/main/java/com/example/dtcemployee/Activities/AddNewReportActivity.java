@@ -11,6 +11,7 @@ import androidx.core.widget.ImageViewCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -19,9 +20,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -106,7 +109,7 @@ public class AddNewReportActivity extends AppCompatActivity {
         datetime = sdp.format(time);
         initViews();
         clickEvents();
-
+        getfilepicker2.setEnabled(false);
         GetEmployeeProject(id);
     }
     private void initViews() {
@@ -114,7 +117,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 
 //        cardviews
         getfilepicker1 = findViewById(R.id.filepicker1);
-//        getfilepicker2 = findViewById(R.id.filepicker2);
+        getfilepicker2 = findViewById(R.id.filepicker2);
 //        getfilepicker3 = findViewById(R.id.filepicker3);
 //        getfilepicker4 = findViewById(R.id.filepicker4);
 //        getfilepicker5 = findViewById(R.id.filepicker5);
@@ -122,7 +125,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 
 //        textviews file picker
         getfilepath1 = findViewById(R.id.file_path1);
-//        getfilepath2 = findViewById(R.id.file_path2);
+        getfilepath2 = findViewById(R.id.file_path2);
 //        getfilepath3 = findViewById(R.id.file_path3);
 //        getfilepath4 = findViewById(R.id.file_path4);
 //        getfilepath5 = findViewById(R.id.file_path5);
@@ -131,7 +134,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 //        textviews uploaded
 
         tv_uploaded1 = findViewById(R.id.tv_uploded1);
-//        tv_uploaded2 = findViewById(R.id.tv_uploded2);
+        tv_uploaded2 = findViewById(R.id.tv_uploded2);
 //        tv_uploaded3 = findViewById(R.id.tv_uploded3);
 //        tv_uploaded4 = findViewById(R.id.tv_uploded4);
 //        tv_uploaded5 = findViewById(R.id.tv_uploded5);
@@ -140,7 +143,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 //        imageviews
 
         ivfilepicker1 = findViewById(R.id.iv_filepicker1);
-//        ivfilepicker2 = findViewById(R.id.iv_filepicker2);
+        ivfilepicker2 = findViewById(R.id.iv_filepicker2);
 //        ivfilepicker3 = findViewById(R.id.iv_filepicker3);
 //        ivfilepicker4 = findViewById(R.id.iv_filepicker4);
 //        ivfilepicker5 = findViewById(R.id.iv_filepicker5);
@@ -166,16 +169,16 @@ public class AddNewReportActivity extends AppCompatActivity {
             }
         });
 
-//        getfilepicker2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                check = "2";
-//                verifyPermissions();
-//
-//            }
-//        });
-//
+        getfilepicker2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                check = "2";
+                verifyPermissions();
+
+            }
+        });
+
 //        getfilepicker3.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -305,9 +308,15 @@ public class AddNewReportActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<UploadEmployeeImage> call, Response<UploadEmployeeImage> response) {
                     if (response.code() == 200) {
-                        hideLoadingDialog();
-                        Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
-                        finish();
+                        if(imageUri1 !=  null){
+                            AddReportImages1(report_id);
+                        }
+                        else{
+                            hideLoadingDialog();
+                            Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
                     } else if (response.code() == 404) {
                         hideLoadingDialog();
 //                        Toast.makeText(AddNewReportActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
@@ -380,7 +389,8 @@ public class AddNewReportActivity extends AppCompatActivity {
             public void onResponse(Call<UploadEmployeeImage> call, Response<UploadEmployeeImage> response) {
                 if (response.code() == 200) {
                     hideLoadingDialog();
-//                    Toast.makeText(AddNewReportActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else if (response.code() == 404) {
                     hideLoadingDialog();
 //                    Toast.makeText(AddNewReportActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
@@ -548,7 +558,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 
     private void openGallery() {
         myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        myFileIntent.setType("image/*");
+        myFileIntent.setType("*/*");
         startActivityForResult(myFileIntent, 1);
     }
 
@@ -604,6 +614,15 @@ public class AddNewReportActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private String getfileExtension(Uri uri)
+    {
+        String extension;
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        extension= mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+        return extension;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -611,23 +630,88 @@ public class AddNewReportActivity extends AppCompatActivity {
 
         if (check.equals("1")) {
             imageUri = data.getData();
-//                    String path = data.getData().getPath();
-//                    String filename = path.substring(path.lastIndexOf("/")+1);
-//                    tv_uploaded1.setText(filename);
-            getfilepath1.setVisibility(View.GONE);
-            tv_uploaded1.setVisibility(View.VISIBLE);
-            ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+            try{
+                String ext= getfileExtension(imageUri);
+                Log.d("URI",ext);
+                if(ext.equals("pdf")){
+                    getfilepath1.setVisibility(View.GONE);
+                    tv_uploaded1.setVisibility(View.VISIBLE);
+                    getfilepicker2.setEnabled(true);
+                    ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext.equals("docx")){
+                    getfilepath1.setVisibility(View.GONE);
+                    tv_uploaded1.setVisibility(View.VISIBLE);
+                    getfilepicker2.setEnabled(true);
+                    ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext.equals("png")){
+                    getfilepath1.setVisibility(View.GONE);
+                    tv_uploaded1.setVisibility(View.VISIBLE);
+                    getfilepicker2.setEnabled(true);
+                    ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext.equals("jpg")){
+                    getfilepath1.setVisibility(View.GONE);
+                    tv_uploaded1.setVisibility(View.VISIBLE);
+                    getfilepicker2.setEnabled(true);
+                    ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext.equals("jpeg")){
+                    getfilepath1.setVisibility(View.GONE);
+                    tv_uploaded1.setVisibility(View.VISIBLE);
+                    getfilepicker2.setEnabled(true);
+                    ImageViewCompat.setImageTintList(ivfilepicker1, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else{
+                    Toast.makeText(this, "Select jpg, jpeg, pdf or docx format..", Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch(Exception e){
+                Toast.makeText(this, "Select jpg, jpeg, pdf or docx format..", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
-
         if (check.equals("2")) {
-//                    String path = data.getData().getPath();
-//                    String filename = path.substring(path.lastIndexOf("/")+1);
-//                    tv_uploaded2.setText(filename);
             imageUri1 = data.getData();
-            getfilepath2.setVisibility(View.GONE);
-            tv_uploaded2.setVisibility(View.VISIBLE);
-            ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+            try{
+                String ext1= getfileExtension(imageUri1);
+                Log.d("URI",ext1);
+                if(ext1.equals("pdf")){
+                    getfilepath2.setVisibility(View.GONE);
+                    tv_uploaded2.setVisibility(View.VISIBLE);
+                    ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext1.equals("docx")){
+                    getfilepath2.setVisibility(View.GONE);
+                    tv_uploaded2.setVisibility(View.VISIBLE);
+                    ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext1.equals("png")){
+                    getfilepath2.setVisibility(View.GONE);
+                    tv_uploaded2.setVisibility(View.VISIBLE);
+                    ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext1.equals("jpg")){
+                    getfilepath2.setVisibility(View.GONE);
+                    tv_uploaded2.setVisibility(View.VISIBLE);
+                    ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else if(ext1.equals("jpeg")){
+                    getfilepath2.setVisibility(View.GONE);
+                    tv_uploaded2.setVisibility(View.VISIBLE);
+                    ImageViewCompat.setImageTintList(ivfilepicker2, ColorStateList.valueOf(getResources().getColor(R.color.hologreen)));
+                }
+                else{
+                    Toast.makeText(this, "Select jpg, jpeg, pdf or docx format..", Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch(Exception e){
+                Toast.makeText(this, "Select jpg, jpeg, pdf or docx format..", Toast.LENGTH_SHORT).show();
+
+            }
+
         }
 
         if (check.equals("3")) {
