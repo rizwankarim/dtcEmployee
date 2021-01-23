@@ -66,11 +66,11 @@
             android:layout_height="145dp"
             android:layout_margin="10dp"
             android:id="@+id/textNoti"
-            android:gravity="right"
+            android:gravity="left"
             android:padding="10dp"
             android:textSize="16sp"
             android:background="@drawable/backgroungsearch"
-            android:textDirection="rtl"
+            android:textDirection="ltr"
             />
     </LinearLayout>
 

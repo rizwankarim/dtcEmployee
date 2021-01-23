@@ -32,6 +32,8 @@ import com.example.dtcemployee.HomeFragments.HomeFragment;
 import com.example.dtcemployee.HomeFragments.VacationsFragment;
 import com.example.dtcemployee.HomeFragments.MovementsFragment;
 import com.example.dtcemployee.HomeFragments.NotificationsFragment;
+import com.example.dtcemployee.Models.EndDateNotify.EndDateNotify;
+import com.example.dtcemployee.Models.GetAllLocation.GetAllLocation;
 import com.example.dtcemployee.R;
 import com.example.dtcemployee.RetrofitClient.RetrofitClientClass;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -49,6 +51,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import io.paperdb.Paper;
 import okhttp3.ResponseBody;
@@ -82,6 +89,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Paper.init(this);
+        String emp_id= Paper.book().read("user_id");
+        //checkenddates(emp_id);
 
 //        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 //
@@ -161,6 +172,35 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+//    public void checkenddates(String emp_id){
+//        Date time1 = Calendar.getInstance().getTime();
+//        SimpleDateFormat sdp = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//        String date = sdp.format(time1);
+//        Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
+//
+//        Call<EndDateNotify> call = RetrofitClientClass.getInstance()
+//                .getInterfaceInstance().Check_end_date(emp_id,date);
+//        call.enqueue(new Callback<EndDateNotify>() {
+//            @Override
+//            public void onResponse(Call<EndDateNotify> call, Response<EndDateNotify> response) {
+//                try{
+//                    if(response.code()==200){
+//                        Toast.makeText(HomeActivity.this, "Checked", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//                catch(Exception e){
+//                    Toast.makeText(HomeActivity.this, "Something goes wrong...", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<EndDateNotify> call, Throwable t) {
+//                Toast.makeText(HomeActivity.this, "Error while checking", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void clickEvents() {
 

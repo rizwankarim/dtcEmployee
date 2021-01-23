@@ -395,6 +395,8 @@ public class HomeFragment extends Fragment {
                     txtCheckIn.setText("Checked In");
                     check_in.setBackgroundColor(Color.parseColor("#ff669900"));
                     check_in.setEnabled(false);
+                    txtCheckIn.setEnabled(false);
+                    Paper.book().write("check_in_id",response.body().getC_id());
                     Paper.book().write("status", "Checkedin");
                     txtCheckOut.setText("Check Out");
                     check_out.setBackgroundColor(Color.parseColor("#CF3827"));
@@ -427,9 +429,11 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<CheckIn> call, Response<CheckIn> response) {
                 if (response.code() == 200) {
                     hideLoadingDialog();
+                    Paper.book().write("check_in_id",response.body().getC_id());
                     txtCheckIn.setText("Checked In");
                     check_in.setBackgroundColor(Color.parseColor("#ff669900"));
                     check_in.setEnabled(false);
+                    txtCheckIn.setEnabled(false);
                     Paper.book().write("status", "Checkedin");
                     txtCheckOut.setText("Check Out");
                     check_out.setBackgroundColor(Color.parseColor("#CF3827"));
@@ -484,11 +488,12 @@ public class HomeFragment extends Fragment {
 
     private void CheckOut() {
        showLoadingDialog();
+        String c_id= Paper.book().read("check_in_id");
         Date time = Calendar.getInstance().getTime();
         SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.UK);
         String check_out_time = sdp.format(time);
         Call<CheckOut> call = RetrofitClientClass.getInstance().getInterfaceInstance().CheckOut("",location_id,emp_id,
-                latitudes, longitudes, check_out_time);
+                latitudes, longitudes, check_out_time,c_id);
         call.enqueue(new Callback<CheckOut>() {
             @Override
             public void onResponse(Call<CheckOut> call, Response<CheckOut> response) {
@@ -501,6 +506,7 @@ public class HomeFragment extends Fragment {
                     txtCheckOut.setEnabled(false);
                     check_out.setEnabled(false);
                     check_out.setBackgroundColor(Color.parseColor("#A7A7A7"));
+                    Paper.book().delete("check_in_id");
                     Paper.book().write("status", "Checkedout");
 //                   Paper.book().destroy();
 //                   startActivity(new Intent(requireContext(),LoginActivity.class));

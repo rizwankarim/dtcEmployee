@@ -8,6 +8,7 @@ import com.example.dtcemployee.Models.CheckInchckout.CheckInCheckOut;
 import com.example.dtcemployee.Models.CheckOut.CheckOut;
 import com.example.dtcemployee.Models.EmployeeAttendence.EmployeeAttenndence;
 import com.example.dtcemployee.Models.EmptoEmpNotification.EmptoEmpNotification;
+import com.example.dtcemployee.Models.EndDateNotify.EndDateNotify;
 import com.example.dtcemployee.Models.GetAllEmployees.GetAllEmployees;
 import com.example.dtcemployee.Models.GetAllEmployeesNotification.GetAllEmployeesNotification;
 import com.example.dtcemployee.Models.GetAllLocation.GetAllLocation;
@@ -42,6 +43,12 @@ public interface APIinterface {
             @Query("user_name") String user_name,
             @Query("password") String password,
             @Query("imei_number") String imei_number
+    );
+
+    @POST("end_dates_check.php")
+    Call<EndDateNotify> Check_end_date(
+            @Query("emp_id") String emp_id,
+            @Query("current_date") String current_date
     );
 
     @POST("update_loginStatus.php")
@@ -167,7 +174,8 @@ public interface APIinterface {
             @Query("emp_id") String emp_id,
             @Query("latitudes") double  latitudes,
             @Query("longitudes") double longitudes,
-            @Query("check_out_time") String check_out_time
+            @Query("check_out_time") String check_out_time,
+            @Query("c_id") String c_id
     );
     @POST("get_employee_attendence_report.php")
     Call<EmployeeAttenndence> Employeeattendance(

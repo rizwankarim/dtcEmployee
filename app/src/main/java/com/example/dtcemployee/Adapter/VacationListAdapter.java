@@ -57,16 +57,19 @@ public class VacationListAdapter extends RecyclerView.Adapter<VacationListAdapte
         else if(employeeVacation.getStatus().equals("Accepted")){
             holder.Status.setText(employeeVacation.getStatus());
             holder.Status.setTextColor(Color.parseColor("#1fbf31"));
+            holder.employee_layout.setEnabled(false);
         }
         else if(employeeVacation.getStatus().equals("Rejected")) {
             holder.Status.setText(employeeVacation.getStatus());
             holder.Status.setTextColor(Color.parseColor("#eb0c0c"));
+            holder.employee_layout.setEnabled(false);
         }
         holder.Status.setText(employeeVacation.getStatus());
 
         holder.employee_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                 dialog.setMessage("What do you Want to Do?");
                 dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -85,7 +88,7 @@ public class VacationListAdapter extends RecyclerView.Adapter<VacationListAdapte
                         dialog1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
+                                dialog.dismiss();
                             }
                         });
                         dialog1.show();
@@ -103,7 +106,7 @@ public class VacationListAdapter extends RecyclerView.Adapter<VacationListAdapte
                         context.startActivity(intent);
                     }
                 });
-                dialog.show();
+                //dialog.show();
                 dialog.setNeutralButton("View", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

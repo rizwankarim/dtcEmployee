@@ -313,7 +313,10 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         beginningDateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateVacationRequestActivity.this, new DatePickerDialog.OnDateSetListener() {
+                Calendar now= Calendar.getInstance();
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(CreateVacationRequestActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         month = month + 1;

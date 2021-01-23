@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             clickEvents();
         }else
             {
-
                 Toast.makeText(this, "Internet Not Available", Toast.LENGTH_SHORT).show();
             }
     }
