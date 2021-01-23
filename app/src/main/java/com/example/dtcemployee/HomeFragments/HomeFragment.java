@@ -124,13 +124,13 @@ public class HomeFragment extends Fragment {
 
             if(checkConnection())
             {
-                Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
                 GetEmployeeLocation();
                 GetManagerLocation();
                 EmployeeDetail(id);
             }else
                 {
-                    Toast.makeText(getActivity(), Double.toString(latitudes)+","+Double.toString(longitudes), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), Double.toString(latitudes)+","+Double.toString(longitudes), Toast.LENGTH_SHORT).show();
                     Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
                 }
 
@@ -344,9 +344,9 @@ public class HomeFragment extends Fragment {
         String latlong_offline_lon=Paper.book().read("latLong_offline_lon");
         // store db data here
 
-        Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
+                //Toast.LENGTH_SHORT).show();
 
         if(time_offline!=null && latlong_offline_lat!=null && latlong_offline_lon!=null){
             Double initlat= Double.parseDouble(latlong_offline_lat);
@@ -358,7 +358,7 @@ public class HomeFragment extends Fragment {
                 Double distance= CalculationByDistance(initlat,initlong,finallat,finallong);
                 if (distance<=100){
                     String loc_id=allLocationList.get(i).getId();
-                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                     CheckIn(loc_id,initlat,initlong,time_offline);
                     Paper.book().delete("checkedIn_time_offline");
                     Paper.book().delete("latLong_offline_lat");
@@ -366,9 +366,14 @@ public class HomeFragment extends Fragment {
                     break;
                 }
                 else{
-                    Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                    Log.d("Offline data","Failed");
+                    Paper.book().delete("checkedIn_time_offline");
+                    Paper.book().delete("latLong_offline_lat");
+                    Paper.book().delete("latLong_offline_lon");
+                    //Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
                 }
             }
+            Toast.makeText(getActivity(), "Check in status checked", Toast.LENGTH_SHORT).show();
         }
         else{
             Log.d("Offline data","No data available");
