@@ -37,6 +37,7 @@ import com.example.dtcemployee.Models.VacationDetail.VacationDetail;
 import com.example.dtcemployee.R;
 import com.example.dtcemployee.RetrofitClient.RetrofitClientClass;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
 import retrofit2.Call;
@@ -123,7 +125,6 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
         } else if (originCheck.equals("EditVacation")) {
             id = getIntent().getStringExtra("id");
@@ -380,41 +381,56 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         }
 
         else{
-            if (type_id.isEmpty()) {
-                Toast.makeText(this, "Please Select Type", Toast.LENGTH_SHORT).show();
-            } else if (beginning_date.isEmpty()) {
-                tvBeginning.setError("Please Enter Start Date");
-                tvBeginning.requestFocus();
-            } else if (ending_date.isEmpty()) {
-                tvEnd.setError("Please Enter End Date");
-                tvEnd.requestFocus();
-            } else if (Reason.isEmpty()) {
-                edtReason.getText().toString();
-                edtReason.requestFocus();
-            } else {
-                showLoadingDialog();
-                Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
-                        emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
-                call.enqueue(new Callback<AddVocation>() {
-                    @Override
-                    public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {
-                        if (response.code() == 200) {
-                            hideLoadingDialog();
-                            finish();
-                            Toast.makeText(CreateVacationRequestActivity.this, "Add Vacation Successfully", Toast.LENGTH_SHORT).show();
-                        } else if (response.code() == 400) {
-                            hideLoadingDialog();
-                            Toast.makeText(CreateVacationRequestActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<AddVocation> call, Throwable t) {
-                        hideLoadingDialog();
+            SimpleDateFormat format = new SimpleDateFormat("dd/M/yyyy");
+            try {
+                Date startDateConverted = format.parse(beginning_date);
+                Date endDateConverted= format.parse(ending_date);
+                long diff = (endDateConverted.getDate() - startDateConverted.getDate())+1;
 
-                        Toast.makeText(CreateVacationRequestActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                if (diff<=2){
+                    if (type_id.isEmpty()) {
+                        Toast.makeText(this, "Please Select Type", Toast.LENGTH_SHORT).show();
+                    } else if (beginning_date.isEmpty()) {
+                        tvBeginning.setError("Please Enter Start Date");
+                        tvBeginning.requestFocus();
+                    } else if (ending_date.isEmpty()) {
+                        tvEnd.setError("Please Enter End Date");
+                        tvEnd.requestFocus();
+                    } else if (Reason.isEmpty()) {
+                        edtReason.getText().toString();
+                        edtReason.requestFocus();
+                    } else {
+                        showLoadingDialog();
+                        Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
+                                emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
+                        call.enqueue(new Callback<AddVocation>() {
+                            @Override
+                            public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {
+                                if (response.code() == 200) {
+                                    hideLoadingDialog();
+                                    finish();
+                                    Toast.makeText(CreateVacationRequestActivity.this, "Add Vacation Successfully", Toast.LENGTH_SHORT).show();
+                                } else if (response.code() == 400) {
+                                    hideLoadingDialog();
+                                    Toast.makeText(CreateVacationRequestActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<AddVocation> call, Throwable t) {
+                                hideLoadingDialog();
+
+                                Toast.makeText(CreateVacationRequestActivity.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                });
+                }
+                else{
+                    Toast.makeText(CreateVacationRequestActivity.this, "Vacation request are not allowed for more then two days..", Toast.LENGTH_SHORT).show();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
 

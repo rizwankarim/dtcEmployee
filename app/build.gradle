@@ -55,7 +55,7 @@ dependencies {
 
     //paper Db
     implementation 'io.paperdb:paperdb:2.7.1'
-
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "com.airbnb.android:lottie:3.4.0"
 
     implementation 'com.google.android.libraries.places:places:2.4.0'

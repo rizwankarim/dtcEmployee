@@ -7,6 +7,7 @@ import com.example.dtcemployee.Models.CheckIn.CheckIn;
 import com.example.dtcemployee.Models.CheckInchckout.CheckInCheckOut;
 import com.example.dtcemployee.Models.CheckOut.CheckOut;
 import com.example.dtcemployee.Models.EmployeeAttendence.EmployeeAttenndence;
+import com.example.dtcemployee.Models.EmployeePic.EmployeePic;
 import com.example.dtcemployee.Models.EmptoEmpNotification.EmptoEmpNotification;
 import com.example.dtcemployee.Models.EndDateNotify.EndDateNotify;
 import com.example.dtcemployee.Models.GetAllEmployees.GetAllEmployees;
@@ -177,6 +178,13 @@ public interface APIinterface {
             @Query("check_out_time") String check_out_time,
             @Query("c_id") String c_id
     );
+
+    @POST("get_employee_photo.php")
+    Call<EmployeePic> getEmployeePic(
+            @Query("emp_id") String employee_id
+
+    );
+
     @POST("get_employee_attendence_report.php")
     Call<EmployeeAttenndence> Employeeattendance(
             @Query("id") String id

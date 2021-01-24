@@ -42,6 +42,7 @@ import com.example.dtcemployee.Adapter.HomeFragmentAdapter;
 import com.example.dtcemployee.Activities.AddNewReportActivity;
 import com.example.dtcemployee.Models.CheckIn.CheckIn;
 import com.example.dtcemployee.Models.CheckOut.CheckOut;
+import com.example.dtcemployee.Models.EmployeePic.EmployeePic;
 import com.example.dtcemployee.Models.GetAllLocation.AllLocation;
 import com.example.dtcemployee.Models.GetAllLocation.GetAllLocation;
 import com.example.dtcemployee.Models.GetEmployeeLocation.EmployeeLocation;
@@ -71,6 +72,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,18 +83,18 @@ import java.util.Locale;
 import java.util.Timer;
 
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
 
 public class HomeFragment extends Fragment {
     LinearLayout check_in, check_out;
     Window window;
     Timer timer;
     AlertDialog loadingDialog;
+    CircleImageView emp_image;
     TextView txtCheckOut, txtCheckIn,txtManagerName, noData;
 
     ImageButton back_profile;
@@ -171,10 +173,12 @@ public class HomeFragment extends Fragment {
         back_profile = view.findViewById(R.id.back_profile);
         Spinner_home = view.findViewById(R.id.Spinner_home);
         txtManagerName = view.findViewById(R.id.txtManagerName);
+        emp_image=view.findViewById(R.id.emp_image);
         noData= view.findViewById(R.id.noData);
         emp_id = Paper.book().read("user_id");
         id = Paper.book().read("user_id");
         manager_id = Paper.book().read("manager_id");
+        getphoto(emp_id);
 
         TabLayout.setupWithViewPager(Viewpager);
         //setUpViewPager(Viewpager);
@@ -236,8 +240,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 androidx.appcompat.app.AlertDialog.Builder dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
-                dialog.setMessage("What do you Want to Do?");
-                dialog.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                dialog.setMessage("Do you really want to logout?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //String emp_id= Paper.book().read("user_id");
@@ -250,6 +254,14 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+
 
                 dialog.show();
             }
@@ -268,7 +280,6 @@ public class HomeFragment extends Fragment {
         if(status != null){
         if(status.equals( "Checkedin")){
 //            Toast.makeText(requireContext(), ""+"Checkedin", Toast.LENGTH_SHORT).show();
-
 
             txtCheckIn.setText("Checked In");
             check_in.setBackgroundColor(Color.parseColor("#ff669900"));
@@ -338,6 +349,29 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public void getphoto(String employee_id){
+        Call<EmployeePic> call = RetrofitClientClass.getInstance().getInterfaceInstance().getEmployeePic(employee_id);
+        call.enqueue(new Callback<EmployeePic>() {
+            @Override
+            public void onResponse(Call<EmployeePic> call, Response<EmployeePic> response) {
+
+                String image_url= "http://dtc.anstm.com/dtcAdmin/api/Manager/Employee/Joining_Image/"+response.body().getPhoto();
+                Picasso
+                        .get()
+                        .load(image_url)
+                        .resize(100, 100)
+                        .noFade()
+                        .into(emp_image);
+
+            }
+
+            @Override
+            public void onFailure(Call<EmployeePic> call, Throwable t) {
+                Log.d("Employee pic","No pic");
+            }
+        });
+    }
+
     public void insertOfflinedata(){
         String time_offline=Paper.book().read("checkedIn_time_offline");
         String latlong_offline_lat=Paper.book().read("latLong_offline_lat");
@@ -379,7 +413,6 @@ public class HomeFragment extends Fragment {
             Log.d("Offline data","No data available");
         }
     }
-
 
     private void CheckIn() {
         showLoadingDialog();

@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(checkConnection())
         {
-            Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
             initViews();
             clickEvents();
         }else
