@@ -28,10 +28,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+import com.androidbuts.multispinnerfilter.MultiSpinnerListener;
+import com.androidbuts.multispinnerfilter.MultiSpinnerSearch;
 import com.example.dtcemployee.Models.AddVocation.AddVocation;
 import com.example.dtcemployee.Models.GetAllVacationTypye.GetAllVacation;
 import com.example.dtcemployee.Models.GetAllVacationTypye.VacationType;
 import com.example.dtcemployee.Models.GetAllVcation.EmployeeVacation;
+import com.example.dtcemployee.Models.GetEmployeeSubEmployee.AllSubEmployee;
+import com.example.dtcemployee.Models.GetEmployeeSubEmployee.GetemployeeSubEmployee;
 import com.example.dtcemployee.Models.UpDateVacationRequest.UpDateVacationRequest;
 import com.example.dtcemployee.Models.VacationDetail.VacationDetail;
 import com.example.dtcemployee.R;
@@ -62,9 +67,13 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
     String check;
     String manager_id, emp_id, type_id, beginning_date, ending_date, Reason;
     List<String> holidays = new ArrayList<>();
+    List<AllSubEmployee> allSubEmployeeList = new ArrayList<>();
+    List<String> employeeList = new ArrayList<>();
     ArrayAdapter<String> spinnerArrayAdapter;
+    ArrayAdapter<String> spinnerEmployeeAdapter;
     AlertDialog loadingDialog;
     String originCheck, id,employeeId = "";
+    String subEmployeeName;
     TextView txtCreateVaction;
     List<VacationType> employeeVacationList = new ArrayList<>();
 
@@ -87,6 +96,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
         initViews();
         clickEvents();
+
 
         if(checkConnection())
         {
@@ -266,8 +276,6 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
         }
 
-
-
     private void VAcationDetail(String id) {
         Call<VacationDetail> call = RetrofitClientClass.getInstance().getInterfaceInstance().Vacationdetail(id);
         call.enqueue(new Callback<VacationDetail>() {
@@ -436,8 +444,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
+        @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
