@@ -2,7 +2,9 @@ package com.example.dtcemployee.FirebaseServices;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
@@ -11,16 +13,20 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.dtcemployee.Activities.HomeActivity;
 import com.example.dtcemployee.R;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
+
+import io.paperdb.Paper;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
@@ -40,12 +46,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         showNotification(remoteMessage.getData());
+
     }
 
     private void showNotification(Map<String, String> data) {
-
+        Paper.init(this);
         String title = data.get("title");
         String body = data.get("body");
+        String click_Action= data.get("click_action");
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "com.example.dtcemployee";
@@ -81,9 +89,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             e.printStackTrace();
         }
 
-
+        Intent openIntent = new Intent(getApplicationContext(), HomeActivity.class);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
-
+        PendingIntent myIntent= PendingIntent.getActivity(this,0,openIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setAutoCancel(true)
                 .setSound(uri)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -92,6 +100,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.logo_high)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setContentIntent(myIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setStyle(new NotificationCompat.BigTextStyle()

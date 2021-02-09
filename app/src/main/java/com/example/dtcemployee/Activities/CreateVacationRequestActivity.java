@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,12 +61,14 @@ import retrofit2.Response;
 public class CreateVacationRequestActivity extends AppCompatActivity {
 
     Button button;
-    Spinner spinner;
+    Spinner spinner,subemp_spinner;
     EditText tvBeginning, tvEnd;
     EditText edtReason, empName;
     LinearLayout beginningDateLayout, endDateLayout;
     String check;
-    String manager_id, emp_id, type_id, beginning_date, ending_date, Reason;
+    Switch checkSelfEmployee;
+    Boolean switchState;
+    String manager_id, emp_id, type_id, beginning_date, ending_date, Reason,subEmpName;
     List<String> holidays = new ArrayList<>();
     List<AllSubEmployee> allSubEmployeeList = new ArrayList<>();
     List<String> employeeList = new ArrayList<>();
@@ -101,6 +104,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         if(checkConnection())
         {
             getAllVacationTypye();
+            getAllSubemployees();
         }
         else
         {
@@ -244,7 +248,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void spinnerevents(List<VacationType> employeeVacationList) {
+    public void spinnerevents(List<VacationType> employeeVacationList) {
 
 
             List<String> employeeList = new ArrayList<>();
@@ -276,6 +280,32 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
 
         }
 
+    public void spinnerSubEmp(List<AllSubEmployee> subEmployeeLists) {
+
+
+        List<String> employeeList = new ArrayList<>();
+
+        for (int w = 0; w < subEmployeeLists.size(); w++) {
+            employeeList.add(subEmployeeLists.get(w).getSubEmployeeName());
+        }
+        spinnerEmployeeAdapter = new ArrayAdapter<String>
+                (this,  R.layout.spineer_layout,
+                        employeeList); //selected item will look like a spinner set from XML
+        spinnerEmployeeAdapter.setDropDownViewResource(R.layout.spineer_layout);
+        subemp_spinner.setAdapter(spinnerEmployeeAdapter);
+        subemp_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                 subEmpName = subemp_spinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
     private void VAcationDetail(String id) {
         Call<VacationDetail> call = RetrofitClientClass.getInstance().getInterfaceInstance().Vacationdetail(id);
         call.enqueue(new Callback<VacationDetail>() {
@@ -308,7 +338,8 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         beginningDateLayout = findViewById(R.id.beginningDate);
         endDateLayout = findViewById(R.id.EndDate);
         edtReason = findViewById(R.id.edtReason);
-        empName= findViewById(R.id.name);
+        subemp_spinner= findViewById(R.id.name);
+        checkSelfEmployee = findViewById(R.id.selfswitch);
 
     }
 
@@ -336,6 +367,8 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+
 
         endDateLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,13 +409,21 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
         SimpleDateFormat sdp1 = new SimpleDateFormat(" hh:mm a", Locale.US);
         String date = sdp.format(time1);
         String time = sdp1.format(time1);
-
+        String emp_name="";
+        switchState=checkSelfEmployee.isChecked();
         type_id = spinner.getSelectedItem().toString();
         String beginning_date = tvBeginning.getText().toString();
         String ending_date = tvEnd.getText().toString();
         String Reason = edtReason.getText().toString();
         String type_id = employeeId;
-        String emp_name= empName.getText().toString();
+
+        if(switchState){
+            emp_name=subemp_spinner.getSelectedItem().toString();
+        }
+        else{
+            emp_name= "Self";
+        }
+
 
         if(date.equals(beginning_date)){
             Toast.makeText(this, "Sorry, You can't make today your beginning date for leave..", Toast.LENGTH_SHORT).show();
@@ -442,6 +483,24 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void getAllSubemployees(){
+        Call<GetemployeeSubEmployee> call = RetrofitClientClass.getInstance().getInterfaceInstance().getEmployeeSubEmploye(emp_id);
+        call.enqueue(new Callback<GetemployeeSubEmployee>() {
+            @Override
+            public void onResponse(Call<GetemployeeSubEmployee> call, Response<GetemployeeSubEmployee> response) {
+                if(response.code()==200){
+                    allSubEmployeeList= response.body().getAllSubEmployees();
+                    spinnerSubEmp(allSubEmployeeList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetemployeeSubEmployee> call, Throwable t) {
+
+            }
+        });
     }
 
         @Override

@@ -6,7 +6,9 @@ import com.example.dtcemployee.Models.AddVocation.AddVocation;
 import com.example.dtcemployee.Models.CheckIn.CheckIn;
 import com.example.dtcemployee.Models.CheckInchckout.CheckInCheckOut;
 import com.example.dtcemployee.Models.CheckOut.CheckOut;
+import com.example.dtcemployee.Models.DailyReportDeatil.DailyReportDetail;
 import com.example.dtcemployee.Models.EmployeeAttendence.EmployeeAttenndence;
+import com.example.dtcemployee.Models.EmployeeDailyReportModel.GetEmployeeDailyReport;
 import com.example.dtcemployee.Models.EmployeePic.EmployeePic;
 import com.example.dtcemployee.Models.EmptoEmpNotification.EmptoEmpNotification;
 import com.example.dtcemployee.Models.EndDateNotify.EndDateNotify;
@@ -44,6 +46,18 @@ public interface APIinterface {
             @Query("user_name") String user_name,
             @Query("password") String password,
             @Query("imei_number") String imei_number
+    );
+
+    @POST("get_subemp_daily_report.php")
+    Call<GetEmployeeDailyReport> employeeDailyReport(
+            @Query("emp_id") String id,
+            @Query("date") String date
+
+    );
+
+    @POST("get_report_detail.php")
+    Call<DailyReportDetail> DailyReportDetail(
+            @Query("id") String id
     );
 
     @POST("end_dates_check.php")
@@ -166,6 +180,18 @@ public interface APIinterface {
             @Query("latitudes") double latitudes,
             @Query("longitudes") double longitudes,
             @Query("check_in_time") String check_in_time
+
+    );
+
+    @POST("check_in_and_out.php")
+    Call<CheckIn> CheckInAndOut(
+            @Query("project_id") String project_id,
+            @Query("location_id") String location_id,
+            @Query("emp_id") String emp_id,
+            @Query("latitudes") double latitudes,
+            @Query("longitudes") double longitudes,
+            @Query("check_in_time") String check_in_time,
+            @Query("check_out_time") String check_out_time
 
     );
     @POST("check_out.php")

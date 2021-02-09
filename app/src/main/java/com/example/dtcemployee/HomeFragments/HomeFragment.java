@@ -73,6 +73,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
+import com.wdullaer.materialdatetimepicker.date.TextViewWithCircularIndicator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class HomeFragment extends Fragment {
     TextView txtCheckOut, txtCheckIn,txtManagerName, noData;
 
     ImageButton back_profile;
+    ImageButton refresh;
     ArrayAdapter<String> spinnerArrayAdapter;
     List<EmployeeProject> employeeProjectList = new ArrayList<>();
     List<EmployeeLocation> employeeLocationList = new ArrayList<>();
@@ -175,6 +177,7 @@ public class HomeFragment extends Fragment {
         txtManagerName = view.findViewById(R.id.txtManagerName);
         emp_image=view.findViewById(R.id.emp_image);
         noData= view.findViewById(R.id.noData);
+        refresh=view.findViewById(R.id.refresh);
         emp_id = Paper.book().read("user_id");
         id = Paper.book().read("user_id");
         manager_id = Paper.book().read("manager_id");
@@ -192,16 +195,52 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        refresh. setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkConnection())
+                {
+                    //Toast.makeText(getActivity(), "Connected to Internet", Toast.LENGTH_SHORT).show();
+                    GetEmployeeLocation();
+                    GetManagerLocation();
+                    EmployeeDetail(id);
+                    getphoto(emp_id);
+                }else
+                {
+                    //Toast.makeText(getActivity(), Double.toString(latitudes)+","+Double.toString(longitudes), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         check_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(location_id.equals("")){
 
-                    Toast.makeText(requireContext(), "No Location Assigned", Toast.LENGTH_SHORT).show();
+                if(checkConnection()){
+                    if(location_id.equals("")){
+
+                        Toast.makeText(requireContext(), "No Location Assigned", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        CheckOut();
+                    }
                 }
-                else {
-                CheckOut();
+                else{
+                    Store_CheckoutTime_on_offline();
+                    String checkOutTime_offline=Get_CheckoutTime_on_offline();
+                    LatLng loc_offline=new LatLng(latitudes,longitudes);
+                    Paper.book().write("latLong_offline_checkout_lat", Double.toString(loc_offline.latitude));
+                    Paper.book().write("latLong_offline_checkout_lon", Double.toString(loc_offline.longitude));
+                    Paper.book().write("checkedOut_time_offline",checkOutTime_offline);
+                    check_out.setEnabled(false);
+                    txtCheckOut.setEnabled(false);
+                    check_in.setEnabled(true);
+                    txtCheckOut.setText("Checked out offline");
+                    txtCheckIn.setText("Check in");
+                    txtCheckIn.setEnabled(false);
                 }
+
             }
         });
         check_in.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +271,12 @@ public class HomeFragment extends Fragment {
                     Paper.book().write("latLong_offline_lat", Double.toString(loc_offline.latitude));
                     Paper.book().write("latLong_offline_lon", Double.toString(loc_offline.longitude));
                     Paper.book().write("checkedIn_time_offline",checkInTime_offline);
+                    check_out.setEnabled(true);
+                    txtCheckOut.setEnabled(true);
+                    check_in.setEnabled(false);
+                    txtCheckIn.setText("Checked in offline");
+                    txtCheckOut.setText("Check out");
+                    txtCheckIn.setEnabled(false);
                 }
             }
         });
@@ -302,7 +347,7 @@ public class HomeFragment extends Fragment {
             check_in.setEnabled(true);
             check_in.setBackgroundColor(Color.parseColor("#CF3827"));
 
-        }
+            }
         }
     }
 
@@ -323,7 +368,21 @@ public class HomeFragment extends Fragment {
                         Spinner_home.setEnabled(true);
                         check_in.setEnabled(true);
                         spinnerevents(allLocationList);
-                        insertOfflinedata();
+                        String time_ci=Paper.book().read("checkedIn_time_offline");
+                        String time_co=Paper.book().read("checkedOut_time_offline");
+                        String lat_ci= Paper.book().read("latLong_offline_lat");
+                        String lon_ci=Paper.book().read("latLong_offline_lon");
+                        String lat_co=Paper.book().read("latLong_offline_checkout_lat");
+                        String lon_co=Paper.book().read("latLong_offline_checkout_lon");
+                        if(time_ci!= null &&time_co!=null&&lat_ci!=null&&lon_ci!=null&&lat_co!=null&&lon_co!=null){
+                            insertBothCheckInAndOutOffline();
+                        }
+                        else if(time_ci!= null&&lat_ci!=null&&lon_ci!=null){
+                            insertOfflinedata();
+                        }
+                        else if(time_co!=null&&lat_co!=null&&lon_co!=null){
+                            insertOfflineCheckOutdata();
+                        }
                     }
                     else {
                         noData.setVisibility(View.VISIBLE);
@@ -414,6 +473,112 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void insertOfflineCheckOutdata(){
+        String time_offline=Paper.book().read("checkedOut_time_offline");
+        String latlong_offline_lat=Paper.book().read("latLong_offline_checkout_lat");
+        String latlong_offline_lon=Paper.book().read("latLong_offline_checkout_lon");
+        // store db data here
+
+        //Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
+        //Toast.LENGTH_SHORT).show();
+
+        if(time_offline!=null && latlong_offline_lat!=null && latlong_offline_lon!=null){
+            Double initlat= Double.parseDouble(latlong_offline_lat);
+            Double initlong=Double.parseDouble(latlong_offline_lon);
+
+            for (int i=0;i<allLocationList.size();i++){
+                Double finallat=Double.parseDouble(allLocationList.get(i).getLatitudes());
+                Double finallong=Double.parseDouble(allLocationList.get(i).getLongitudes());
+                Double distance= CalculationByDistance(initlat,initlong,finallat,finallong);
+                if (distance<=100){
+                    String loc_id=allLocationList.get(i).getId();
+                    //Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    CheckOut(loc_id,initlat,initlong,time_offline);
+                    Paper.book().delete("checkedOut_time_offline");
+                    Paper.book().delete("latLong_offline_lat");
+                    Paper.book().delete("latLong_offline_lon");
+                    break;
+                }
+                else{
+                    Log.d("Offline data","Failed");
+                    Paper.book().delete("checkedOut_time_offline");
+                    Paper.book().delete("latLong_offline_checkout_lat");
+                    Paper.book().delete("latLong_offline_checkout_lon");
+                    //Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+            Toast.makeText(getActivity(), "Check in status checked", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Log.d("Offline data","No data available");
+        }
+    }
+
+    public void insertBothCheckInAndOutOffline(){
+        String time_offline_checkin=Paper.book().read("checkedIn_time_offline");
+        String time_offline_checkout=Paper.book().read("checkedOut_time_offline");
+        String lat_checkin_offline= Paper.book().read("latLong_offline_lat");
+        String lon_checkin_offline=Paper.book().read("latLong_offline_lon");
+        String checkout_offline_lat=Paper.book().read("latLong_offline_checkout_lat");
+        String checkout_offline_lon=Paper.book().read("latLong_offline_checkout_lon");
+        // store db data here
+
+        //Toast.makeText(getActivity(), "Last Checked in at "+time_offline, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Last Checked in coords "+latlong_offline_lat+", "+latlong_offline_lon,
+        //Toast.LENGTH_SHORT).show();
+
+        if(time_offline_checkin!=null && time_offline_checkout!=null && lat_checkin_offline!=null&& lon_checkin_offline!=null
+        && checkout_offline_lat!=null && checkout_offline_lon!=null)
+        {
+            Double initlat= Double.parseDouble(lat_checkin_offline);
+            Double initlong=Double.parseDouble(lon_checkin_offline);
+            Double finalLat_co=Double.parseDouble(checkout_offline_lat);
+            Double finalLon_co=Double.parseDouble(checkout_offline_lon);
+
+            for (int i=0;i<allLocationList.size();i++){
+                Double finallat=Double.parseDouble(allLocationList.get(i).getLatitudes());
+                Double finallong=Double.parseDouble(allLocationList.get(i).getLongitudes());
+                Double distance= CalculationByDistance(initlat,initlong,finallat,finallong);
+                if (distance<=100){
+                    for (int j=0;j<allLocationList.size();j++){
+                        Double finallat2=Double.parseDouble(allLocationList.get(i).getLatitudes());
+                        Double finallong2=Double.parseDouble(allLocationList.get(i).getLongitudes());
+                        Double distance2= CalculationByDistance(finalLat_co,finalLon_co,finallat2,finallong2);
+                        if(distance2<=100){
+                            String loc_id=allLocationList.get(i).getId();
+                            CheckInAndOut(loc_id,initlat,initlong,time_offline_checkin,time_offline_checkout);
+                            Paper.book().delete("checkedIn_time_offline");
+                            Paper.book().delete("checkedOut_time_offline");
+                            Paper.book().delete("latLong_offline_lat");
+                            Paper.book().delete("latLong_offline_lon");
+                            Paper.book().delete("latLong_offline_checkout_lat");
+                            Paper.book().delete("latLong_offline_checkout_lon");
+                            break;
+                        }
+                        else{
+                            Log.d("Offline data","Failed");
+                        }
+                    }
+                    break;
+                }
+                else{
+                    Log.d("Offline data","Failed");
+                    Paper.book().delete("checkedIn_time_offline");
+                    Paper.book().delete("checkedOut_time_offline");
+                    Paper.book().delete("latLong_offline_lat");
+                    Paper.book().delete("latLong_offline_lon");
+                    Paper.book().delete("latLong_offline_checkout_lat");
+                    Paper.book().delete("latLong_offline_checkout_lon");
+                }
+            }
+            Toast.makeText(getActivity(), "Check in status checked", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Log.d("Offline data","No data available");
+        }
+    }
+
     private void CheckIn() {
         showLoadingDialog();
         Date time = Calendar.getInstance().getTime();
@@ -440,6 +605,39 @@ public class HomeFragment extends Fragment {
                     check_out.setBackgroundColor(Color.parseColor("#CF3827"));
                     check_out.setEnabled(true);
                     txtCheckOut.setEnabled(true);
+
+                } else if (response.code() == 400) {
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Please Reached at Project Site First", Toast.LENGTH_SHORT).show();
+                }
+                else if(response.code() ==404) {
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CheckIn> call, Throwable t) {
+                hideLoadingDialog();
+                Toast.makeText(requireContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void CheckInAndOut(String loc_id,Double lat,Double lon,String checkintime,String checkouttime) {
+        showLoadingDialog();
+        Call<CheckIn> call = RetrofitClientClass.getInstance().getInterfaceInstance().CheckInAndOut("17",loc_id, emp_id,  lat,  lon, checkintime,checkouttime);
+        call.enqueue(new Callback<CheckIn>() {
+            @Override
+            public void onResponse(Call<CheckIn> call, Response<CheckIn> response) {
+                if (response.code() == 200) {
+                    hideLoadingDialog();
+                    Log.d("Offlinecheckinandoutid",response.body().getC_id());
+                    txtCheckIn.setText("Check In");
+                    check_in.setEnabled(true);
+                    txtCheckIn.setEnabled(true);
+                    txtCheckOut.setText("Checked Out");
+                    check_out.setEnabled(false);
+                    txtCheckOut.setEnabled(false);
 
                 } else if (response.code() == 400) {
                     hideLoadingDialog();
@@ -524,8 +722,54 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void CheckOut() {
+    private void CheckOut(String loc_id,Double lat,Double lon,String checkouttime) {
        showLoadingDialog();
+        String c_id= Paper.book().read("check_in_id");
+        Date time = Calendar.getInstance().getTime();
+        SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.UK);
+        String check_out_time = sdp.format(time);
+        Call<CheckOut> call = RetrofitClientClass.getInstance().getInterfaceInstance().CheckOut("",loc_id,emp_id,
+                lat, lon, checkouttime,c_id);
+        call.enqueue(new Callback<CheckOut>() {
+            @Override
+            public void onResponse(Call<CheckOut> call, Response<CheckOut> response) {
+                if(response.code() == 200) {
+                    txtCheckIn.setText("Check In");
+                    check_in.setBackgroundColor(Color.parseColor("#CF3827"));
+                    txtCheckIn.setEnabled(true);
+                    check_in.setEnabled(true);
+                    txtCheckOut.setText("Checked Out");
+                    txtCheckOut.setEnabled(false);
+                    check_out.setEnabled(false);
+                    check_out.setBackgroundColor(Color.parseColor("#A7A7A7"));
+                    Paper.book().delete("check_in_id");
+                    Paper.book().write("status", "Checkedout");
+//                   Paper.book().destroy();
+//                   startActivity(new Intent(requireContext(),LoginActivity.class));
+//                    hideLoadingDialog();
+                    hideLoadingDialog();
+                }
+                else if(response.code() == 400){
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Please Reach at Project Site First", Toast.LENGTH_SHORT).show();
+                }
+                else if(response.code() == 404) {
+                    hideLoadingDialog();
+                    Toast.makeText(requireContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CheckOut> call, Throwable t) {
+                hideLoadingDialog();
+                Toast.makeText(requireContext(), ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    private void CheckOut() {
+        showLoadingDialog();
         String c_id= Paper.book().read("check_in_id");
         Date time = Calendar.getInstance().getTime();
         SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.UK);
@@ -860,6 +1104,20 @@ public class HomeFragment extends Fragment {
 
     }
 
+    public void Store_CheckoutTime_on_offline()
+    {
+        Toast.makeText(getActivity(), "Storing Time While Offline", Toast.LENGTH_SHORT).show();
+        Date time = Calendar.getInstance().getTime();
+        SimpleDateFormat sdp = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US);
+        String check_out_time = sdp.format(time);
+
+
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("offline_Data_checkout", Context.MODE_PRIVATE).edit();
+        editor.putString("check_out_time", check_out_time);
+        editor.apply();
+
+    }
+
     public String Get_CheckInTime_on_offline()
     {
         String checkInTime = null;
@@ -874,6 +1132,22 @@ public class HomeFragment extends Fragment {
             checkInTime="No time defined";
         }
         return checkInTime;
+    }
+
+    public String Get_CheckoutTime_on_offline()
+    {
+        String checkOutTime = null;
+        SharedPreferences prefs = getActivity().getSharedPreferences("offline_Data_checkout", Context.MODE_PRIVATE);
+        if(prefs.contains("check_out_time"))
+        {
+            String time = prefs.getString("check_out_time", "No time defined");
+            checkOutTime=time;
+            Toast.makeText(getActivity(), "Time offline "+time, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            checkOutTime="No time defined";
+        }
+        return checkOutTime;
     }
 
     private boolean checkConnection(){

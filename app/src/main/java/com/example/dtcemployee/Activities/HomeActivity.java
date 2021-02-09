@@ -92,6 +92,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         Paper.init(this);
         String emp_id= Paper.book().read("user_id");
+
         //checkenddates(emp_id);
 
 //        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -108,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         if(checkConnection())
         {
+
             //Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
             initViews();
             clickEvents();
@@ -118,6 +120,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             clickEvents();
             Toast.makeText(this, "Internet Not Available", Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
     }
 

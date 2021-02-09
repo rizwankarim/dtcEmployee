@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ public class MovementsFragment extends Fragment {
     RecyclerView RecylerViewAttendence;
     ImageView ic_empty;
     TextView textnodata;
+    ImageButton refresh;
     AlertDialog loadingDialog;
     LinearLayout recy_layout,empty_layout;
     String id;
@@ -60,7 +62,7 @@ public class MovementsFragment extends Fragment {
         ic_empty = view.findViewById(R.id.ic_empty);
         textnodata = view.findViewById(R.id.textnodata);
         recy_layout = view.findViewById(R.id.recy_layout);
-
+        refresh= view.findViewById(R.id.refresh);
         empty_layout = view.findViewById(R.id.empty_layout);
         Paper.init(requireContext());
         id = Paper.book().read("user_id");
@@ -69,7 +71,18 @@ public class MovementsFragment extends Fragment {
         RecylerViewAttendence.setHasFixedSize(false);
         RecylerViewAttendence.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
 
-
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkConnection())
+                {
+                    getEmployeeAttendence(id);
+                }else
+                {
+                    Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override

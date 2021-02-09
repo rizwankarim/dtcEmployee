@@ -28,10 +28,10 @@
             android:layout_weight="0.5" />
 
         <ImageView
-            android:layout_width="300dp"
-            android:layout_height="100dp"
+            android:layout_width="400dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:src="@drawable/hd_logo" />
+            android:src="@drawable/logo" />
 
         <View
             android:layout_width="match_parent"

@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAppMain">#2A4153</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="app_red">#CF3827</color>
     <color name="button_blue">#2A4153</color>

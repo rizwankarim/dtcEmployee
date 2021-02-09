@@ -45,6 +45,7 @@ public class VacationsFragment extends Fragment {
     List<ModelClass> modelClassesList = new ArrayList<>();
     RecyclerView recyclerView;
     String emp_id;
+    ImageButton refresh;
     AlertDialog loadingDialog;
     List<EmployeeVacation> employeeVacationList = new ArrayList<>();
     TextView textnodata;
@@ -63,6 +64,7 @@ public class VacationsFragment extends Fragment {
         Paper.init(requireContext());
         emp_id = Paper.book().read("user_id");
         textnodata = view.findViewById(R.id.textnodata);
+        refresh= view.findViewById(R.id.refresh);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +74,19 @@ public class VacationsFragment extends Fragment {
                 Intent intent = new Intent(requireContext(), CreateVacationRequestActivity.class);
                 intent.putExtra("orign", "AddVacation");
                 startActivity(intent);
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkConnection())
+                {
+                    getData();
+                }else
+                {
+                    Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

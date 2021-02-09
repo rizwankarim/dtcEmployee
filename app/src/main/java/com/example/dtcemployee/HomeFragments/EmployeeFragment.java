@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class EmployeeFragment extends Fragment {
     RecyclerView recyclerViewSubEmployees;
     ProgressBar progressBar1;
     String manager_id;
+    ImageButton refresh;
     AlertDialog loadingDialog;
     List<AllSubEmployee> allSubEmployeeList = new ArrayList<>();
     String emp_id;
@@ -58,9 +60,24 @@ public class EmployeeFragment extends Fragment {
         Paper.init(requireContext());
         emp_id = Paper.book().read("user_id");
         textnodata = view.findViewById(R.id.textnodata);
+        refresh= view.findViewById(R.id.refresh);
         recyclerViewSubEmployees = view.findViewById(R.id.recyclerViewSubEmployees);
         recyclerViewSubEmployees.setHasFixedSize(true);
         recyclerViewSubEmployees.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkConnection())
+                {
+                    GetallSubEmployee(emp_id);
+
+                }else
+                {
+                    Toast.makeText(getActivity(), "Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 

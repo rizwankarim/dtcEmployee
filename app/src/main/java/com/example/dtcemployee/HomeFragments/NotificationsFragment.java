@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.androidbuts.multispinnerfilter.KeyPairBoolData;
@@ -74,7 +75,6 @@ public class NotificationsFragment extends Fragment {
         create_employee_btn = view.findViewById(R.id.create_employee_btn);
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
-
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getChildFragmentManager(), requireContext());
         fragmentAdapter.addFrag(new SubEmployeeFragment(), "Sub Employee");
         fragmentAdapter.addFrag(new ManagerFragment(), "Manager");

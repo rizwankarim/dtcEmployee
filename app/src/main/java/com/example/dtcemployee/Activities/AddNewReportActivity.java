@@ -118,16 +118,16 @@ public class AddNewReportActivity extends AppCompatActivity {
 //        cardviews
         getfilepicker1 = findViewById(R.id.filepicker1);
         getfilepicker2 = findViewById(R.id.filepicker2);
-//        getfilepicker3 = findViewById(R.id.filepicker3);
-//        getfilepicker4 = findViewById(R.id.filepicker4);
+        getfilepicker3 = findViewById(R.id.filepicker3);
+        getfilepicker4 = findViewById(R.id.filepicker4);
 //        getfilepicker5 = findViewById(R.id.filepicker5);
 //        getfilepicker6 = findViewById(R.id.filepicker6);
 
 //        textviews file picker
         getfilepath1 = findViewById(R.id.file_path1);
         getfilepath2 = findViewById(R.id.file_path2);
-//        getfilepath3 = findViewById(R.id.file_path3);
-//        getfilepath4 = findViewById(R.id.file_path4);
+        getfilepath3 = findViewById(R.id.file_path3);
+        getfilepath4 = findViewById(R.id.file_path4);
 //        getfilepath5 = findViewById(R.id.file_path5);
 //        getfilepath6 = findViewById(R.id.file_path6);
 
@@ -135,8 +135,8 @@ public class AddNewReportActivity extends AppCompatActivity {
 
         tv_uploaded1 = findViewById(R.id.tv_uploded1);
         tv_uploaded2 = findViewById(R.id.tv_uploded2);
-//        tv_uploaded3 = findViewById(R.id.tv_uploded3);
-//        tv_uploaded4 = findViewById(R.id.tv_uploded4);
+        tv_uploaded3 = findViewById(R.id.tv_uploded3);
+        tv_uploaded4 = findViewById(R.id.tv_uploded4);
 //        tv_uploaded5 = findViewById(R.id.tv_uploded5);
 //        tv_uploaded6 = findViewById(R.id.tv_uploded6);
 
@@ -144,8 +144,8 @@ public class AddNewReportActivity extends AppCompatActivity {
 
         ivfilepicker1 = findViewById(R.id.iv_filepicker1);
         ivfilepicker2 = findViewById(R.id.iv_filepicker2);
-//        ivfilepicker3 = findViewById(R.id.iv_filepicker3);
-//        ivfilepicker4 = findViewById(R.id.iv_filepicker4);
+        ivfilepicker3 = findViewById(R.id.iv_filepicker3);
+        ivfilepicker4 = findViewById(R.id.iv_filepicker4);
 //        ivfilepicker5 = findViewById(R.id.iv_filepicker5);
 //        ivfilepicker6 = findViewById(R.id.iv_filepicker6);
         edtTarget = findViewById(R.id.edtTarget);
@@ -179,23 +179,23 @@ public class AddNewReportActivity extends AppCompatActivity {
             }
         });
 
-//        getfilepicker3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                check = "3";
-//                verifyPermissions();
-//            }
-//        });
-//
-//        getfilepicker4.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                check = "4";
-//                verifyPermissions();
-//            }
-//        });
+        getfilepicker3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                check = "3";
+                verifyPermissions();
+            }
+        });
+
+        getfilepicker4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                check = "4";
+                verifyPermissions();
+            }
+        });
 //
 //        getfilepicker5.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -248,9 +248,9 @@ public class AddNewReportActivity extends AppCompatActivity {
         } else if (problems.isEmpty()) {
             edtProblem.setError("Please Enter Problems");
             edtProblem.requestFocus();
-        } else if (imageUri == null) {
+        } /*else if (imageUri == null) {
             Toast.makeText(this, "Please Upload File", Toast.LENGTH_SHORT).show();
-        } else {
+        }*/else {
             showLoadingDialog();
             Call<AddReport> call = RetrofitClientClass.getInstance().getInterfaceInstance().Addreport(emp_id, project_id, target, datetime ,achievement, problems,manager_id, date, time);
             call.enqueue(new Callback<AddReport>() {
@@ -261,6 +261,11 @@ public class AddNewReportActivity extends AppCompatActivity {
                         int report_id = response.body().getAddReportId();
                         if (imageUri != null) {
                             AddReportImages(report_id);
+                        }
+                        else{
+                            hideLoadingDialog();
+                            Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
 //                        if(imageUri1 !=  null){
 //                            AddReportImages1(report_id);
@@ -388,9 +393,15 @@ public class AddNewReportActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UploadEmployeeImage> call, Response<UploadEmployeeImage> response) {
                 if (response.code() == 200) {
-                    hideLoadingDialog();
-                    Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
-                    finish();
+                    if(imageUri2 !=  null){
+                           AddReportImages2(report_id);
+                        }
+                    else{
+                        hideLoadingDialog();
+                        Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
                 } else if (response.code() == 404) {
                     hideLoadingDialog();
 //                    Toast.makeText(AddNewReportActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
@@ -422,8 +433,14 @@ public class AddNewReportActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UploadEmployeeImage> call, Response<UploadEmployeeImage> response) {
                 if (response.code() == 200) {
-                    hideLoadingDialog();
-//                    Toast.makeText(AddNewReportActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                    if(imageUri3 !=  null){
+                        AddReportImages3(report_id);
+                    }
+                    else{
+                        hideLoadingDialog();
+                        Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 } else if (response.code() == 404) {
                     hideLoadingDialog();
 //                    Toast.makeText(AddNewReportActivity.this, "Something Wrong", Toast.LENGTH_SHORT).show();
@@ -448,14 +465,14 @@ public class AddNewReportActivity extends AppCompatActivity {
 
         MultipartBody.Part files = MultipartBody.Part.createFormData("picture", file.getName(), image);
 
-
-
         Call<UploadEmployeeImage> call = RetrofitClientClass.getInstance().getInterfaceInstance().UploadReportFile(emp_id,String.valueOf(report_id), files);
         call.enqueue(new Callback<UploadEmployeeImage>() {
             @Override
             public void onResponse(Call<UploadEmployeeImage> call, Response<UploadEmployeeImage> response) {
                 if (response.code() == 200) {
                     hideLoadingDialog();
+                    Toast.makeText(AddNewReportActivity.this, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                    finish();
 //                    Toast.makeText(AddNewReportActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
                 } else if (response.code() == 404) {
                     hideLoadingDialog();
@@ -558,7 +575,7 @@ public class AddNewReportActivity extends AppCompatActivity {
 
     private void openGallery() {
         myFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        myFileIntent.setType("*/*");
+        myFileIntent.setType("image/*");
         startActivityForResult(myFileIntent, 1);
     }
 
