@@ -61,7 +61,7 @@ public class ManagerNoticationActivity extends AppCompatActivity {
 
 
                 Call<EmployeeNotification> call = RetrofitClientClass.getInstance().getInterfaceInstance()
-                        .CreateNotification(manager_id,employee_id,  "Notification by Employee", notifications, date, time);
+                        .CreateNotification(manager_id,employee_id,  "Notification by "+Paper.book().read("emp_name"), notifications, date, time);
                 call.enqueue(new Callback<EmployeeNotification>() {
                     @Override
                     public void onResponse(Call<EmployeeNotification> call, Response<EmployeeNotification> response) {

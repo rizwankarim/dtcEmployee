@@ -32,6 +32,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment {
     Window window;
     Timer timer;
     AlertDialog loadingDialog;
-    CircleImageView emp_image;
+    ImageView emp_image;
     TextView txtCheckOut, txtCheckIn,txtManagerName, noData;
 
     ImageButton back_profile;
@@ -418,8 +419,6 @@ public class HomeFragment extends Fragment {
                 Picasso
                         .get()
                         .load(image_url)
-                        .resize(100, 100)
-                        .noFade()
                         .into(emp_image);
 
             }
@@ -843,6 +842,7 @@ public class HomeFragment extends Fragment {
 //                    txtusername,txtposition,txtallowed,txtemployeeId,txtjoiningDate,txtPassportNumber,txtPassportEnddate;
                     if(response.body().getEmployeeDetail().size() > 0) {
                         txtManagerName.setText(response.body().getEmployeeDetail().get(0).getUserName());
+                        Paper.book().write("emp_name",response.body().getEmployeeDetail().get(0).getUserName());
                     }
                     else {
                         Toast.makeText(requireContext(), "No Sub Employee Here", Toast.LENGTH_SHORT).show();

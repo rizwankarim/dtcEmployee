@@ -452,7 +452,7 @@ public class CreateVacationRequestActivity extends AppCompatActivity {
                     } else {
                         showLoadingDialog();
                         Call<AddVocation> call = RetrofitClientClass.getInstance().getInterfaceInstance().AddVaction(manager_id,
-                                emp_id,emp_name, type_id, beginning_date, ending_date, Reason);
+                                emp_id,emp_name, type_id, beginning_date, ending_date, Reason,"Requested by "+Paper.book().read("emp_name"));
                         call.enqueue(new Callback<AddVocation>() {
                             @Override
                             public void onResponse(Call<AddVocation> call, Response<AddVocation> response) {

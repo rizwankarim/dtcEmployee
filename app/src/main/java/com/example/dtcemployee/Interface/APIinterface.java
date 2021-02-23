@@ -87,7 +87,9 @@ public interface APIinterface {
             @Query("problems") String problems,
             @Query("manager_id") String manager_id,
             @Query("date") String date,
-            @Query("time") String time
+            @Query("time") String time,
+            @Query("title") String title,
+            @Query("notification") String notification
     );
 
     @Multipart
@@ -106,7 +108,8 @@ public interface APIinterface {
             @Query("type_id") String type_id,
             @Query("beginning_date") String beginning_date,
             @Query("ending_date") String ending_date,
-            @Query("Reason") String Reason
+            @Query("Reason") String Reason,
+            @Query("notification") String notification
     );
     @POST("get_all_vacation_request.php")
     Call<GetAllVaction> GetAllVaction(

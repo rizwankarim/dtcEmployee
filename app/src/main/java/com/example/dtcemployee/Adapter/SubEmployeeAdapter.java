@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -47,28 +48,38 @@ public class SubEmployeeAdapter extends RecyclerView.Adapter<SubEmployeeAdapter.
         holder.sub_employee_Layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-                dialog.setMessage("What do you Want to Do?");
-                dialog.setPositiveButton("Detail", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, ShowEmployeeDetailActivity.class);
-                        intent.putExtra("orign", "EditVehicle");
+                try{
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                    dialog.setMessage("What do you Want to Do?");
+                    dialog.setPositiveButton("Detail", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            try{
+                                Intent intent = new Intent(context, ShowEmployeeDetailActivity.class);
+                                intent.putExtra("orign", "EditVehicle");
 
-                        Common.employeeId = allSubEmployee.getSubEmpId();
-                        context.startActivity(intent);
-                    }
-                });
-                dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                                Common.employeeId = allSubEmployee.getSubEmpId();
+                                context.startActivity(intent);
+                            }
+                            catch (Exception e){
+                                Toast.makeText(context, "Something goes wrong", Toast.LENGTH_SHORT).show();
+                            }
 
+                        }
+                    });
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-                    }
-                });
+                    dialog.show();
+                }
+                catch (Exception e){
+                    Toast.makeText(context, "Something goes wrong", Toast.LENGTH_SHORT).show();
+                }
 
-                dialog.show();
             }
         });
 

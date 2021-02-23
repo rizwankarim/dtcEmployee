@@ -9,409 +9,565 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="10"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8"
-            android:orientation="horizontal">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/ChildProfiletoolbar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/ChildProfiletoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ToolbarWhiteArrow">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:theme="@style/ToolbarWhiteArrow">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Employee Details"
-                    android:layout_gravity="center"
-                    android:textColor="@color/colorlightBlack"
-                    android:textSize="18sp" />
-            </androidx.appcompat.widget.Toolbar>
-        </LinearLayout>
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:gravity="center"
+                    android:text="Employee Detail"
+                    android:textColor="@color/colorAppMain"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:layout_weight="1.5"
+                    />
 
-        <LinearLayout
+                <ImageView
+                    android:layout_width="0dp"
+                    android:scaleType="fitCenter"
+                    android:layout_height="72dp"
+                    android:layout_gravity="right"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/logo"
+                    android:layout_weight="0.5"/>
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9.2"
-            android:padding="10dp"
-            android:orientation="vertical">
-            <ScrollView
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_weight="2"
+                    android:id="@+id/txtUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:text="User Name"
+                    android:textColor="@color/colorAppMain"
+                    android:textSize="22sp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_margin="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitXY"
+                        android:background="@color/colorAppMain"
+                        android:id="@+id/emp_image"/>
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:orientation="vertical"
+                        android:layout_weight="1.5">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
+                                android:layout_weight="0.5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Employee Name:"
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/txtusername"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text=" "
+                                android:textStyle="bold"
+                                android:text="Position: "
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
 
-
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
-
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Password:"
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/txtPassword"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text=" "
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-
-
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Unique Id:"
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/txtUniqueId"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text=" "
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-
-
-                        </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="position:"
-                                android:textColor="@color/colorlightBlack"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-
-                            android:gravity="center_vertical">
-
-                            <TextView
+                                android:layout_weight="1.5"
                                 android:id="@+id/txtposition"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-                                android:text=" "
+                                android:text="Position"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
+                                android:layout_weight="0.5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
-                                android:text="Over Time:"
+                                android:textStyle="bold"
+                                android:text="Password: "
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical">
-
 
                             <TextView
-                                android:id="@+id/txtallowed"
+                                android:layout_weight="1.5"
+                                android:id="@+id/txtPassword"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-
-                                android:text=" "
+                                android:text="My pass"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
+                                android:layout_weight="0.5"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Employee id:"
+                                android:textStyle="bold"
+                                android:text="Phone:"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical">
-
 
                             <TextView
-                                android:id="@+id/txtemployeeId"
+                                android:layout_weight="1.5"
+                                android:id="@+id/txtPhone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-
-                                android:text=" "
+                                android:text="Phone"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
                         </LinearLayout>
+
                     </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:layout_weight="1.5">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
+                                android:layout_weight="0.3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Joining Date:"
+                                android:textStyle="bold"
+                                android:text="ID/Iqama No:"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical">
-
 
                             <TextView
-                                android:id="@+id/txtjoiningDate"
+                                android:layout_weight="1.7"
+                                android:id="@+id/txtUiqueId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-
                                 android:text=" "
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
                         </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="30dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="0.3"
+                                android:textStyle="bold"
+                                android:text="ID End Date:"
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/txtUniqueID"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1.7"
+                                android:text=" "
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/txtidFile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:text="View ID"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/view_button_drawable"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_weight="0.3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:text="Passport No:"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical">
-
 
                             <TextView
+                                android:layout_weight="1.7"
                                 android:id="@+id/txtPassportNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-
                                 android:text=" "
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
                         </LinearLayout>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
 
                         <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.7"
-                            android:gravity="center_vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
 
                             <TextView
+                                android:layout_weight="0.3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Passport EndDate:"
+                                android:textStyle="bold"
+                                android:text="Passport End Date:"
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1.3"
-                            android:gravity="center_vertical">
-
 
                             <TextView
-                                android:id="@+id/txtPassportEnddate"
+                                android:id="@+id/txtPassportEndDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-
+                                android:layout_weight="1.7"
                                 android:text=" "
                                 android:textColor="@color/colorlightBlack"
                                 android:textSize="16sp" />
                         </LinearLayout>
+
                     </LinearLayout>
 
-
-
-
+                    <Button
+                        android:id="@+id/txtPassportFile"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:padding="5dp"
+                        android:layout_weight="0.5"
+                        android:text="View Passport"
+                        android:background="@drawable/view_button_drawable"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.3"
+                                android:textStyle="bold"
+                                android:text="Joining Date:"
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/txtJoiningDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1.7"
+                                android:text=" "
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.3"
+                                android:textStyle="bold"
+                                android:text="Contract End Date:"
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/txtContractDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1.7"
+                                android:text=" "
+                                android:textColor="@color/colorlightBlack"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Button
+                        android:layout_weight="0.5"
+                        android:id="@+id/txtJoiningFile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:padding="6dp"
+                        android:layout_gravity="center"
+                        android:text="Job Contract"
+                        android:background="@drawable/view_button_drawable"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
 
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="Basic Salary:"
+                            android:layout_weight="0.3"
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/txtBasicSalary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.7"
+                            android:text=" "
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:textStyle="bold"
+                            android:text="Allowances:"
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/txtExpenses"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.7"
+                            android:text=" "
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.3"
+                            android:textStyle="bold"
+                            android:text="Over Time:"
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/txtOverTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1.7"
+                            android:text=" "
+                            android:textColor="@color/colorlightBlack"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:weightSum="2">-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:text="Sub employee:"-->
+<!--                            android:layout_weight="0.3"-->
+<!--                            android:textColor="@color/colorlightBlack"-->
+<!--                            android:textSize="16sp" />-->
+
+<!--                        <androidx.recyclerview.widget.RecyclerView-->
+<!--                            android:layout_weight="1.7"-->
+<!--                            android:id="@+id/SubemployeeRecylerView"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/callbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Call"
+                    android:background="@drawable/calllayout"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+<!--                <Button-->
+<!--                    android:id="@+id/resetphone"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginLeft="20dp"-->
+<!--                    android:layout_marginRight="20dp"-->
+<!--                    android:text="Reset Employee Id"-->
+<!--                    android:background="@drawable/view_button_drawable"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="17sp" />-->
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 

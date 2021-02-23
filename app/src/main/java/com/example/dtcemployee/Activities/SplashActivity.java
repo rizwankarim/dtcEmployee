@@ -30,8 +30,6 @@ public class SplashActivity extends AppCompatActivity {
         Paper.init(this);
         showLoadingDialog();
         if (Paper.book().read("user_id") != null) {
-
-
             getData();
         } else {
 

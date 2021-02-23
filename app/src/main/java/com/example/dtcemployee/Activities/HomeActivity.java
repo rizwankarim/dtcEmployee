@@ -71,45 +71,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private static int PERMISSION_ID = 44;
     private FusedLocationProviderClient fusedLocationProviderClient;
-//    LocationCallback locationCallback = new LocationCallback() {
-//        @Override
-//        public void onLocationResult(LocationResult locationResult) {
-//
-//
-//
-//            Log.i("TAG", "latitude:" + "hahahahaa");
-//
-//            Toast.makeText(HomeActivity.this, "hello", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        Paper.init(this);
-        String emp_id= Paper.book().read("user_id");
-
-        //checkenddates(emp_id);
-
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//
-//        if (checkPermissions()) {
-//
-//            enableLocationSettings();
-//
-//        } else {
-//
-//            requestPermission();
-//
-//        }
+        //String emp_id= Paper.book().read("user_id");
 
         if(checkConnection())
         {
-
             //Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
             initViews();
             clickEvents();
@@ -126,6 +97,26 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+
+        String clickaction= intent.getStringExtra("fragment");
+
+        if (clickaction.equals("Vacation")){
+            Fragment newFragment = new VacationsFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            homebtn.setOnClickListener(this);
+
+            employeesbtn.setOnClickListener(this);
+
+            movementsbtn.setOnClickListener(this);
+
+            notificationbtn.setOnClickListener(this);
+
+            vactionbtn.setOnClickListener(this);
+        }
 
     }
 
@@ -180,6 +171,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
 //    public void checkenddates(String emp_id){
 //        Date time1 = Calendar.getInstance().getTime();
 //        SimpleDateFormat sdp = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -209,23 +201,45 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //        });
 //    }
 
+
+
     private void clickEvents() {
 
-        Fragment newFragment = new HomeFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        String clickaction= getIntent().getStringExtra("fragment");
 
-        homebtn.setOnClickListener(this);
+        if (clickaction==null){
 
-        employeesbtn.setOnClickListener(this);
+            Fragment newFragment = new HomeFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
-        movementsbtn.setOnClickListener(this);
+            homebtn.setOnClickListener(this);
 
-        notificationbtn.setOnClickListener(this);
+            employeesbtn.setOnClickListener(this);
 
-        vactionbtn.setOnClickListener(this);
+            movementsbtn.setOnClickListener(this);
+
+            notificationbtn.setOnClickListener(this);
+
+            vactionbtn.setOnClickListener(this);
+
+        }
+
+        else if (clickaction=="Vacation"){
+            changeVactionsFragment();
+
+            homebtn.setOnClickListener(this);
+
+            employeesbtn.setOnClickListener(this);
+
+            movementsbtn.setOnClickListener(this);
+
+            notificationbtn.setOnClickListener(this);
+
+            vactionbtn.setOnClickListener(this);
+        }
     }
 
 

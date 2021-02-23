@@ -81,12 +81,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/emp_image"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="155dp"
+                        android:layout_height="155dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/image3" />
+                        app:cardCornerRadius="250dp"
+                        app:cardBackgroundColor="@color/white">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="145dp"
+                            android:layout_height="145dp"
+                            app:cardCornerRadius="250dp"
+                            android:layout_gravity="center">
+
+                            <ImageView
+                                android:id="@+id/emp_image"
+                                android:layout_width="145dp"
+                                android:layout_height="145dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/image3"/>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </androidx.cardview.widget.CardView>
+
+<!--                    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                        android:id="@+id/emp_image"-->
+<!--                        android:layout_width="110dp"-->
+<!--                        android:layout_height="110dp"-->
+<!--                        android:layout_centerInParent="true"-->
+<!--                        android:src="@drawable/image3" />-->
 
                     <ProgressBar
                         android:layout_width="wrap_content"

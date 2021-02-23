@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,10 +44,16 @@ public class DailyReportDetailAdapter extends RecyclerView.Adapter<DailyReportDe
         holder.txtidFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try{
+                    Intent browsefile = new Intent(Intent.ACTION_VIEW, Uri.parse(image));
+                    browsefile.putExtra("orign", image);
+                    context.startActivity(browsefile);
+                }
+                catch (Exception e){
+                    Toast.makeText(context, "Something goes wrong", Toast.LENGTH_SHORT).show();
+                }
                 //Intent intent = new Intent(context, ViewerActivity.class);
-                Intent browsefile = new Intent(Intent.ACTION_VIEW, Uri.parse(image));
-                browsefile.putExtra("orign", image);
-                context.startActivity(browsefile);
+
 
             }
         });

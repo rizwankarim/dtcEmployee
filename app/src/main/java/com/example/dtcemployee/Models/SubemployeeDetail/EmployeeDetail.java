@@ -64,9 +64,21 @@ public class EmployeeDetail {
     @SerializedName("Passport_End_Date")
     @Expose
     private String passportEndDate;
+    @SerializedName("Contract_End_Date")
+    @Expose
+    private String contract_end_date;
+
     @SerializedName("Sub_Employee")
     @Expose
     private List<Object> subEmployee = null;
+
+    public String getContract_end_date() {
+        return contract_end_date;
+    }
+
+    public void setContract_end_date(String contract_end_date) {
+        this.contract_end_date = contract_end_date;
+    }
 
     public String getId() {
         return id;

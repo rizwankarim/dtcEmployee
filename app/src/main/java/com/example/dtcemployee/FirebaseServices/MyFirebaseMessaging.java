@@ -31,6 +31,7 @@ import io.paperdb.Paper;
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     public static String device_token;
+    public String action_type;
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
@@ -50,10 +51,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     private void showNotification(Map<String, String> data) {
-        Paper.init(this);
         String title = data.get("title");
         String body = data.get("body");
-        String click_Action= data.get("click_action");
+        action_type= data.get("click_action");
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "com.example.dtcemployee";
@@ -90,6 +90,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
 
         Intent openIntent = new Intent(getApplicationContext(), HomeActivity.class);
+            openIntent.putExtra("fragment",action_type);
+            openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
         PendingIntent myIntent= PendingIntent.getActivity(this,0,openIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setAutoCancel(true)

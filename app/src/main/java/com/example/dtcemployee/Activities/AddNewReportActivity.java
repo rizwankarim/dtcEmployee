@@ -252,7 +252,8 @@ public class AddNewReportActivity extends AppCompatActivity {
             Toast.makeText(this, "Please Upload File", Toast.LENGTH_SHORT).show();
         }*/else {
             showLoadingDialog();
-            Call<AddReport> call = RetrofitClientClass.getInstance().getInterfaceInstance().Addreport(emp_id, project_id, target, datetime ,achievement, problems,manager_id, date, time);
+            Call<AddReport> call = RetrofitClientClass.getInstance().getInterfaceInstance().Addreport(emp_id, project_id, target, datetime ,achievement, problems,manager_id, date, time,"New Report",
+                    "Report submitted by "+ Paper.book().read("emp_name"));
             call.enqueue(new Callback<AddReport>() {
                 @Override
                 public void onResponse(Call<AddReport> call, Response<AddReport> response) {

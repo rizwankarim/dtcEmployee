@@ -1,27 +1,37 @@
 package com.example.dtcemployee.EmployeDetailFragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dtcemployee.Activities.ShowEmployeeDetailActivity;
+import com.example.dtcemployee.Activities.ViewerActivity;
 import com.example.dtcemployee.Common.Common;
 import com.example.dtcemployee.Models.SubemployeeDetail.SubEmployeeDetail;
 import com.example.dtcemployee.R;
 import com.example.dtcemployee.RetrofitClient.RetrofitClientClass;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +41,12 @@ import retrofit2.Response;
 public class DetailFragment extends Fragment {
     String id;
     Toolbar ChildProfiletoolbar;
-    TextView txtusername,txtposition,txtallowed,txtemployeeId,txtjoiningDate,txtPassportNumber,txtPassportEnddate,txtPassword,txtUniqueId;
+    public TextView txtUserName, txtPassword, txtposition, txtPhone, txtUiqueId, txtUniqueID, txtPassportNumber, txtPassportEndDate, txtJoiningDate, txtBasicSalary,
+            txtExpenses, txtallowed, txtContractDate;
     AlertDialog loadingDialog;
+    ImageView emp_image;
+
+    Button txtidFile, txtJoiningFile, txtImage, txtPassportFile, callemployee, resetPhone;
 
 
     @Override
@@ -55,15 +69,26 @@ public class DetailFragment extends Fragment {
         ChildProfiletoolbar = view.findViewById(R.id.ChildProfiletoolbar);
         ChildProfiletoolbar.setTitle("");
 
-        txtusername = view.findViewById(R.id.txtusername);
-        txtposition = view.findViewById(R.id.txtposition);
-        txtallowed = view.findViewById(R.id.txtallowed);
-        txtemployeeId = view.findViewById(R.id.txtemployeeId);
-        txtjoiningDate = view.findViewById(R.id.txtjoiningDate);
-        txtPassportNumber = view.findViewById(R.id.txtPassportNumber);
-        txtPassportEnddate = view.findViewById(R.id.txtPassportEnddate);
+        emp_image= view.findViewById(R.id.emp_image);
+        txtUserName = view.findViewById(R.id.txtUserName);
         txtPassword = view.findViewById(R.id.txtPassword);
-        txtUniqueId = view.findViewById(R.id.txtUniqueId);
+        txtposition = view.findViewById(R.id.txtposition);
+        txtPhone = view.findViewById(R.id.txtPhone);
+        txtUiqueId = view.findViewById(R.id.txtUiqueId);
+        txtUniqueID = view.findViewById(R.id.txtUniqueID);
+        txtPassportNumber = view.findViewById(R.id.txtPassportNumber);
+        txtPassportEndDate = view.findViewById(R.id.txtPassportEndDate);
+        txtJoiningDate = view.findViewById(R.id.txtJoiningDate);
+        txtContractDate=view.findViewById(R.id.txtContractDate);
+        txtBasicSalary = view.findViewById(R.id.txtBasicSalary);
+        txtExpenses = view.findViewById(R.id.txtExpenses);
+        txtallowed = view.findViewById(R.id.txtOverTime);
+        callemployee=view.findViewById(R.id.callbutton);
+
+        txtidFile = view.findViewById(R.id.txtidFile);
+        txtJoiningFile = view.findViewById(R.id.txtJoiningFile);
+        //txtImage = view.findViewById(R.id.txtImage);
+        txtPassportFile = view.findViewById(R.id.txtPassportFile);
 
         id = Common.employeeId;
         EmployeeDetail(id);
@@ -78,21 +103,112 @@ public class DetailFragment extends Fragment {
                 if(response.code() == 200) {
 //                    txtusername,txtposition,txtallowed,txtemployeeId,txtjoiningDate,txtPassportNumber,txtPassportEnddate;
                     if(response.body().getEmployeeDetail().size() > 0) {
-                        txtusername.setText(response.body().getEmployeeDetail().get(0).getUserName());
-                        txtposition.setText(response.body().getEmployeeDetail().get(0).getPosition());
-                        txtemployeeId.setText(response.body().getEmployeeDetail().get(0).getEmployeeId());
-                        txtjoiningDate.setText(response.body().getEmployeeDetail().get(0).getJoiningDate());
-                        txtPassportNumber.setText(response.body().getEmployeeDetail().get(0).getPassportNo());
-                        txtPassportEnddate.setText(response.body().getEmployeeDetail().get(0).getPassportEndDate());
-                        txtUniqueId.setText(response.body().getEmployeeDetail().get(0).getId());
+                        txtUserName.setText(response.body().getEmployeeDetail().get(0).getUserName());
                         txtPassword.setText(response.body().getEmployeeDetail().get(0).getPassword());
+                        txtposition.setText(response.body().getEmployeeDetail().get(0).getPosition());
+                        txtPhone.setText(response.body().getEmployeeDetail().get(0).getPhone());
+                        txtUiqueId.setText(response.body().getEmployeeDetail().get(0).getEmployeeId());
+                        txtUniqueID.setText(response.body().getEmployeeDetail().get(0).getEndDate());
+                        txtPassportNumber.setText(response.body().getEmployeeDetail().get(0).getPassportNo());
+                        txtPassportEndDate.setText(response.body().getEmployeeDetail().get(0).getPassportEndDate());
+                        txtJoiningDate.setText(response.body().getEmployeeDetail().get(0).getJoiningDate());
+                        txtContractDate.setText(response.body().getEmployeeDetail().get(0).getContract_end_date());
+                        txtBasicSalary.setText(response.body().getEmployeeDetail().get(0).getBasicSalary());
+                        txtExpenses.setText(response.body().getEmployeeDetail().get(0).getExpenses());
                         if(response.body().getEmployeeDetail().get(0).getOverTime().equals("0")){
                             txtallowed.setText("Not Allowed");
                         }
                         if(!response.body().getEmployeeDetail().get(0).getOverTime().equals("0")){
                             txtallowed.setText("Allowed");
                         }
+                        String File1 = response.body().getEmployeeDetail().get(0).getFile();
+                        String Joining_File1 = response.body().getEmployeeDetail().get(0).getJoiningFile();
+                        String Image1 = response.body().getEmployeeDetail().get(0).getImage();
+                        String Passport_File1 = response.body().getEmployeeDetail().get(0).getPassportFile();
 
+                        String File = "http://dtc.anstm.com/dtcAdmin/api/Manager/Employee/ID/" + response.body().getEmployeeDetail().get(0).getFile();
+                        String Joining_File = response.body().getEmployeeDetail().get(0).getJoiningFile();
+                        String Image = "http://dtc.anstm.com/dtcAdmin/api/Manager/Employee/Joining_Image/" + response.body().getEmployeeDetail().get(0).getImage();
+                        String Passport_File = "http://dtc.anstm.com/dtcAdmin/api/Manager/Employee/PassPort/" + response.body().getEmployeeDetail().get(0).getPassportFile();
+
+                        Picasso.get().load(Image)
+                                .into(emp_image);
+
+                        callemployee.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                makePhoneCall(txtPhone.getText().toString());
+                            }
+                        });
+
+                        txtidFile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                try{
+                                    if (File1 == null || File1.equals("")){
+                                        Toast.makeText(requireContext(), "No File Attached", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        Intent intent = new Intent(getContext(), ViewerActivity.class);
+                                        intent.putExtra("orign", File);
+                                        startActivity(intent);
+                                    }
+                                }
+                                catch(Exception e){
+                                    Toast.makeText(getContext(), "Something goes wrong", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+
+                        txtJoiningFile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try{
+                                    if (Joining_File1== null || Joining_File1.equals("")){
+
+                                        Toast.makeText(requireContext(), "No File Attached", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+                                        Intent browsefile = new Intent(Intent.ACTION_VIEW, Uri.parse(Joining_File));
+                                        browsefile.putExtra("orign", Joining_File);
+                                        startActivity(browsefile);
+                                    }
+                                }
+                                catch(Exception e){
+                                    Toast.makeText(getContext(), "Something goes wrong", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        });
+
+                        txtPassportFile.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                try{
+                                    if (Passport_File1== null  || Passport_File1.equals("")){
+
+                                        Toast.makeText(requireContext(), "No File Attached", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    else {
+
+                                        Intent intent = new Intent(getContext(), ViewerActivity.class);
+                                        intent.putExtra("orign", Passport_File);
+                                        startActivity(intent);
+                                    }
+                                }
+                                catch (Exception e){
+                                    Toast.makeText(getContext(), "Something goes wrong", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        });
                     }
                     else {
                         Toast.makeText(requireContext(), "No Sub Employee Here", Toast.LENGTH_SHORT).show();
@@ -111,6 +227,23 @@ public class DetailFragment extends Fragment {
         });
 
 
+    }
+
+    public void makePhoneCall(String number){
+        if(number.trim().length()>0){
+            if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(requireActivity(),new String[]{
+                        Manifest.permission.CALL_PHONE
+                },1);
+            }
+            else{
+                String dial= "tel:"+number;
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            }
+        }
+        else{
+            Toast.makeText(requireContext(), "No phone number here..", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

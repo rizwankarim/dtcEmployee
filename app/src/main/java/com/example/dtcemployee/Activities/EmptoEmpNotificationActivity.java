@@ -96,7 +96,7 @@ public class EmptoEmpNotificationActivity extends AppCompatActivity {
             Log.i("TAG", "sendNotificationToEmployee:  " + employeeList.get(0)  + " " + employeeList.size());
 
             Call<EmptoEmpNotification> call = RetrofitClientClass.getInstance().getInterfaceInstance()
-                    .emptoempNotification(manager_id, employee_id, employeeList.get(0),"Employee",notifications,date,time);
+                    .emptoempNotification(manager_id, employee_id, employeeList.get(0),Paper.book().read("emp_name")+"(Employee)",notifications,date,time);
             call.enqueue(new Callback<EmptoEmpNotification>() {
                 @Override
                 public void onResponse(Call<EmptoEmpNotification> call, Response<EmptoEmpNotification> response) {
